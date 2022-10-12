@@ -1,0 +1,16 @@
+.container {
+  width: 600px;
+}
+
+.variants {
+  display: flex;
+}
+
+.items {
+  display: flex;
+  height: 688px;
+  width: 600px;
+  overflow-y: scroll;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}

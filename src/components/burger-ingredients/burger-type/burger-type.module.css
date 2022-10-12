@@ -1,0 +1,10 @@
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  column-gap: 24px;
+}
+
+.title {
+  margin: 0;
+}

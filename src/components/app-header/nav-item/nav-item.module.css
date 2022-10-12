@@ -1,0 +1,10 @@
+.icon svg {
+  transition: all 0.2s linear;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.2s linear;
+}
