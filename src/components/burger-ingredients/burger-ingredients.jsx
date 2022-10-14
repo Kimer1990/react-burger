@@ -1,27 +1,27 @@
-import { useState } from 'react'
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { data } from './../../utils/data.js'
-import { BurgerType } from './burger-type/burger-type'
-import styles from './burger-ingredients.module.css'
-import PropTypes from 'prop-types'
-import { burgerListItemPropTypes } from '../../utils/prop-types.js'
+import { useState } from "react";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { data } from "./../../utils/data.js";
+import { BurgerType } from "./burger-type/burger-type";
+import styles from "./burger-ingredients.module.css";
+import PropTypes from "prop-types";
+import { burgerListItemPropTypes } from "../../utils/prop-types.js";
 
 export const BurgerIngredients = () => {
-  const [current, setCurrent] = useState('Булки')
-  const tabsList = ['Булки', 'Соусы', 'Начинки']
+  const [current, setCurrent] = useState("Булки");
+  const tabsList = ["Булки", "Соусы", "Начинки"];
 
-  const burgersBun = data.filter(data => data.type === 'bun')
-  const burgersMain = data.filter(data => data.type === 'main')
-  const burgersSauce = data.filter(data => data.type === 'sauce')
+  const burgersBun = data.filter((data) => data.type === "bun");
+  const burgersMain = data.filter((data) => data.type === "main");
+  const burgersSauce = data.filter((data) => data.type === "sauce");
 
-  const toggleTab = val => {
-    setCurrent(val)
-  }
+  const toggleTab = (val) => {
+    setCurrent(val);
+  };
 
   return (
     <section className={styles.container}>
       <div className={`${styles.variants} mb-10`}>
-        {tabsList.map(item => (
+        {tabsList.map((item) => (
           <Tab
             value={item}
             active={current === item}
@@ -38,9 +38,9 @@ export const BurgerIngredients = () => {
         <BurgerType list={burgersMain} title="Начинки" />
       </div>
     </section>
-  )
-}
+  );
+};
 
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(burgerListItemPropTypes())
-}
+  data: PropTypes.arrayOf(burgerListItemPropTypes),
+};
