@@ -5,7 +5,7 @@ import styles from "./modal.module.css";
 import { useEffect } from "react";
 
 const ESC_KEYCODE = 27;
-const modalRoot = document.getElementById("root");
+const modalRoot = document.getElementById("react-modals");
 
 export const Modal = ({ title, children, closeModal }) => {
   useEffect(() => {

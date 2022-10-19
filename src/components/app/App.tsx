@@ -8,12 +8,12 @@ import { getIngredients } from "../../utils/burger-api";
 function App() {
   const [ingredientsList, setIngridientsList] = useState([]);
 
-  useEffect(() => {
-    const fetchIngredients = async () => {
-      const data = await getIngredients();
-      setIngridientsList(data);
-    };
+  const fetchIngredients = async () => {
+    const data = await getIngredients();
+    setIngridientsList(data);
+  };
 
+  useEffect(() => {
     fetchIngredients();
   }, []);
 
