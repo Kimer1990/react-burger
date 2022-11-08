@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   CurrencyIcon,
   Counter,
@@ -5,10 +6,27 @@ import {
 import styles from "./burger-item.module.css";
 import PropTypes from "prop-types";
 import { burgerListItemPropTypes } from "../../../utils/prop-types";
+import { OrderContext } from "../../../services/orderContext";
 
 export const BurgerItem = (props) => {
+  const { orderList, setOrderList } = useContext(OrderContext);
+
   const showModal = () => {
     props.openModal(props.menuItem);
+    setOrderList(addIngredient());
+  };
+
+  //Временное добавление ингридиента
+  const addIngredient = () => {
+    const bunId = orderList.findIndex(
+      (item) => item.type === "bun" && item.type === props.menuItem.type
+    );
+    if (bunId !== -1) {
+      orderList.splice(bunId, 1, props.menuItem);
+    } else if (!orderList.find((item) => item._id === props.menuItem._id)) {
+      orderList.push(props.menuItem);
+    }
+    return [...orderList];
   };
 
   return (
@@ -42,4 +60,5 @@ BurgerItem.propTypes = {
   menuItem: burgerListItemPropTypes,
   openModal: PropTypes.func.isRequired,
   amount: PropTypes.number.isRequired,
+  orderList: PropTypes.arrayOf(burgerListItemPropTypes),
 };

@@ -4,13 +4,21 @@ import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
 import { useState, useEffect } from "react";
 import { getIngredients } from "../../utils/burger-api";
+import { IngredientsContext } from "../.././services/ingredientsContext";
+import { OrderContext } from "../.././services/orderContext";
 
 function App() {
   const [ingredientsList, setIngridientsList] = useState([]);
 
+  const [orderList, setOrderList] = useState([]);
+
   const fetchIngredients = async () => {
-    const data = await getIngredients();
-    setIngridientsList(data);
+    try {
+      const { data } = await getIngredients();
+      setIngridientsList(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -24,8 +32,14 @@ function App() {
         <h2 className="text text_type_main-large mb-3 title mt-8">
           Соберите бургер
         </h2>
-        <BurgerIngredients ingredients={ingredientsList} />
-        <BurgerConstructor ingredients={ingredientsList} />
+        <IngredientsContext.Provider
+          value={{ ingredientsList, setIngridientsList }}
+        >
+          <OrderContext.Provider value={{ orderList, setOrderList }}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </OrderContext.Provider>
+        </IngredientsContext.Provider>
       </main>
     </div>
   );
