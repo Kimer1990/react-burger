@@ -5,6 +5,10 @@
   max-width: 272px;
 }
 
+.card:hover {
+  cursor: pointer;
+}
+
 .price,
 .desc {
   display: flex;
