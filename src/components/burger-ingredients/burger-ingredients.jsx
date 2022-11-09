@@ -2,8 +2,6 @@ import { useState, useMemo, useCallback, useContext } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerType } from "./burger-type/burger-type";
 import styles from "./burger-ingredients.module.css";
-import PropTypes from "prop-types";
-import { burgerListItemPropTypes } from "../../utils/prop-types.js";
 import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredientDetails/ingredientDetails";
 import { IngredientsContext } from "../.././services/ingredientsContext";
@@ -41,12 +39,12 @@ export const BurgerIngredients = () => {
     });
   }, []);
 
-  const openModal = useCallback((item) => {
+  const showDetails = useCallback((item) => {
     setItemSelected(item);
     setModalOpened(true);
   }, []);
 
-  const closeModal = () => {
+  const closeDetails = () => {
     setModalOpened(false);
   };
 
@@ -68,34 +66,30 @@ export const BurgerIngredients = () => {
         <div className={`customs-scroll ${styles.items}`}>
           <BurgerType
             id="bun"
-            openModal={openModal}
+            openModal={showDetails}
             list={burgersBun}
             title="Булки"
           />
           <BurgerType
             id="sauce"
-            openModal={openModal}
+            openModal={showDetails}
             list={burgersSauce}
             title="Соусы"
           />
           <BurgerType
             id="main"
-            openModal={openModal}
+            openModal={showDetails}
             list={burgersMain}
             title="Начинки"
           />
         </div>
 
         {modalOpened && (
-          <Modal title="Детали ингридиента" closeModal={closeModal}>
+          <Modal title="Детали ингридиента" closeModal={closeDetails}>
             <IngredientDetails {...itemSelected} />
           </Modal>
         )}
       </section>
     )
   );
-};
-
-BurgerIngredients.propTypes = {
-  ingredientsList: PropTypes.arrayOf(burgerListItemPropTypes),
 };

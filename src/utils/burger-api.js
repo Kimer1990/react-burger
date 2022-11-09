@@ -1,6 +1,6 @@
 const apiUrl = "https://norma.nomoreparties.space/api";
 
-const GetRequest = async (url, options = {}) => {
+const makeRequest = async (url, options = {}) => {
   try {
     const response = await fetch(url, options);
     if (response.ok) {
@@ -14,9 +14,9 @@ const GetRequest = async (url, options = {}) => {
 };
 
 export const getIngredients = async () => {
-  return GetRequest(`${apiUrl}/ingredients`);
+  return makeRequest(`${apiUrl}/ingredients`);
 };
 
 export const postOrder = async (data) => {
-  return GetRequest(`${apiUrl}/orders`, data);
+  return makeRequest(`${apiUrl}/orders`, data);
 };

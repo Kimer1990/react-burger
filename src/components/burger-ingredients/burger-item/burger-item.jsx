@@ -18,15 +18,17 @@ export const BurgerItem = (props) => {
 
   //Временное добавление ингридиента
   const addIngredient = () => {
-    const bunId = orderList.findIndex(
-      (item) => item.type === "bun" && item.type === props.menuItem.type
-    );
-    if (bunId !== -1) {
-      orderList.splice(bunId, 1, props.menuItem);
-    } else if (!orderList.find((item) => item._id === props.menuItem._id)) {
-      orderList.push(props.menuItem);
+    if (
+      props.menuItem.type === "bun" &&
+      props.menuItem._id !== orderList.bun._id
+    ) {
+      orderList.bun = props.menuItem;
+    } else if (
+      !orderList.fillings.find((item) => item._id === props.menuItem._id)
+    ) {
+      orderList.fillings.push(props.menuItem);
     }
-    return [...orderList];
+    return { ...orderList };
   };
 
   return (
@@ -60,5 +62,4 @@ BurgerItem.propTypes = {
   menuItem: burgerListItemPropTypes,
   openModal: PropTypes.func.isRequired,
   amount: PropTypes.number.isRequired,
-  orderList: PropTypes.arrayOf(burgerListItemPropTypes),
 };

@@ -10,7 +10,7 @@ import { OrderContext } from "../.././services/orderContext";
 function App() {
   const [ingredientsList, setIngridientsList] = useState([]);
 
-  const [orderList, setOrderList] = useState([]);
+  const [orderList, setOrderList] = useState({ bun: {}, fillings: [] });
 
   const fetchIngredients = async () => {
     try {
@@ -18,6 +18,7 @@ function App() {
       setIngridientsList(data);
     } catch (error) {
       console.error(error);
+      alert("Не удалось получить список ингридиентов :(");
     }
   };
 
@@ -32,14 +33,12 @@ function App() {
         <h2 className="text text_type_main-large mb-3 title mt-8">
           Соберите бургер
         </h2>
-        <IngredientsContext.Provider
-          value={{ ingredientsList, setIngridientsList }}
-        >
-          <OrderContext.Provider value={{ orderList, setOrderList }}>
+        <OrderContext.Provider value={{ orderList, setOrderList }}>
+          <IngredientsContext.Provider value={{ ingredientsList }}>
             <BurgerIngredients />
-            <BurgerConstructor />
-          </OrderContext.Provider>
-        </IngredientsContext.Provider>
+          </IngredientsContext.Provider>
+          <BurgerConstructor />
+        </OrderContext.Provider>
       </main>
     </div>
   );
