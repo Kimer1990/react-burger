@@ -9,26 +9,11 @@ import { burgerListItemPropTypes } from "../../../utils/prop-types";
 import { OrderContext } from "../../../services/orderContext";
 
 export const BurgerItem = (props) => {
-  const { orderList, setOrderList } = useContext(OrderContext);
+  const { addIngredient } = useContext(OrderContext);
 
   const showModal = () => {
     props.openModal(props.menuItem);
-    setOrderList(addIngredient());
-  };
-
-  //Временное добавление ингридиента
-  const addIngredient = () => {
-    if (
-      props.menuItem.type === "bun" &&
-      props.menuItem._id !== orderList.bun._id
-    ) {
-      orderList.bun = props.menuItem;
-    } else if (
-      !orderList.fillings.find((item) => item._id === props.menuItem._id)
-    ) {
-      orderList.fillings.push(props.menuItem);
-    }
-    return { ...orderList };
+    addIngredient(props.menuItem);
   };
 
   return (

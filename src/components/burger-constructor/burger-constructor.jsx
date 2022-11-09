@@ -6,7 +6,6 @@ import {
   CurrencyIcon,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { burgerListItemPropTypes } from "../../utils/prop-types";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../orderDetails/orderDetails";
 import { OrderContext } from "../.././services/orderContext";
@@ -16,38 +15,31 @@ export const BurgerConstructor = () => {
   const [modalOpened, setModalOpened] = useState(false);
   const [order, setOrder] = useState();
 
-  const { orderList, setOrderList } = useContext(OrderContext);
-
-  //временное удаление ингридиента
-  const delIngredient = (object) => {
-    orderList.fillings = orderList.fillings.filter(
-      (item) => item._id !== object._id
-    );
-    return { ...orderList };
-  };
+  const { state, delIngredient } = useContext(OrderContext);
 
   const countSum = useMemo(() => {
+    console.log(state.bun.price * 2);
     return (
-      orderList.fillings.reduce((acc, el) => acc + el.price, 0) +
-      orderList.bun.price * 2
+      state.fillings.reduce((acc, el) => acc + el.price, 0) +
+      state.bun.price * 2
     );
-  }, [orderList]);
+  }, [state.bun, state.fillings]);
 
   const fillingList = useMemo(() => {
-    return orderList.fillings.filter((item) => item.type !== "bun");
-  }, [orderList]);
+    return state.fillings;
+  }, [state.fillings]);
 
   const bun = useMemo(() => {
-    return orderList.bun;
-  }, [orderList]);
+    return state.bun;
+  }, [state.bun]);
 
   const allId = useMemo(() => {
     return [
-      orderList.bun._id,
-      ...orderList.fillings.map((item) => item._id),
-      orderList.bun._id,
+      state.bun._id,
+      ...state.fillings.map((item) => item._id),
+      state.bun._id,
     ];
-  }, [orderList]);
+  }, [state.bun, state.fillings]);
 
   const makeOrder = async () => {
     try {
@@ -96,7 +88,7 @@ export const BurgerConstructor = () => {
                   text={item.name}
                   price={item.price}
                   thumbnail={item.image}
-                  handleClose={() => setOrderList(delIngredient(item))}
+                  handleClose={() => delIngredient(item)}
                 />
               </li>
             );
