@@ -19,15 +19,14 @@ function reducer(state, action) {
         !state.fillings.find((item) => item._id === action.item._id)
       ) {
         state.fillings.push(action.item);
-        console.log(state.fillings);
       }
-      return { ...state.bun, ...state.fillings };
+      return { ...state };
 
-    /*case "del":
+    case "del":
       state.fillings = state.fillings.filter(
         (item) => item._id !== action.item._id
       );
-      return { bun: { ...state.bun }, fillings: [...state.fillings] };*/
+      return { ...state };
 
     default:
       return initialState;
@@ -40,7 +39,6 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const addIngredient = (ingredient) => {
-    console.log(ingredient);
     dispatch({ type: "add", item: ingredient });
   };
 

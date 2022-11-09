@@ -18,20 +18,19 @@ export const BurgerConstructor = () => {
   const { state, delIngredient } = useContext(OrderContext);
 
   const countSum = useMemo(() => {
-    console.log(state.bun.price * 2);
     return (
       state.fillings.reduce((acc, el) => acc + el.price, 0) +
       state.bun.price * 2
     );
-  }, [state.bun, state.fillings]);
+  }, [state]);
 
   const fillingList = useMemo(() => {
     return state.fillings;
-  }, [state.fillings]);
+  }, [state]);
 
   const bun = useMemo(() => {
     return state.bun;
-  }, [state.bun]);
+  }, [state]);
 
   const allId = useMemo(() => {
     return [
@@ -39,7 +38,7 @@ export const BurgerConstructor = () => {
       ...state.fillings.map((item) => item._id),
       state.bun._id,
     ];
-  }, [state.bun, state.fillings]);
+  }, [state]);
 
   const makeOrder = async () => {
     try {
