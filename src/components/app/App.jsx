@@ -12,21 +12,24 @@ const initialState = { bun: {}, fillings: [] };
 function reducer(state, action) {
   switch (action.type) {
     case "add":
-      if (action.item.type === "bun" && action.item._id !== state.bun._id) {
-        state.bun = action.item;
-      } else if (
-        action.item.type !== "bun" &&
-        !state.fillings.find((item) => item._id === action.item._id)
+      if (
+        action.payload.type === "bun" &&
+        action.payload._id !== state.bun._id
       ) {
-        state.fillings.push(action.item);
+        state.bun = action.payload;
+      } else if (
+        action.payload.type !== "bun" &&
+        !state.fillings.find((item) => item._id === action.payload._id)
+      ) {
+        state.fillings.push(action.payload);
       }
-      return { ...state };
+      return { bun: { ...state.bun }, fillings: [...state.fillings] };
 
     case "del":
       state.fillings = state.fillings.filter(
-        (item) => item._id !== action.item._id
+        (item) => item._id !== action.payload._id
       );
-      return { ...state };
+      return { bun: { ...state.bun }, fillings: [...state.fillings] };
 
     default:
       return initialState;
@@ -39,11 +42,11 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const addIngredient = (ingredient) => {
-    dispatch({ type: "add", item: ingredient });
+    dispatch({ type: "add", payload: ingredient });
   };
 
   const delIngredient = (ingredient) => {
-    dispatch({ type: "del", item: ingredient });
+    dispatch({ type: "del", payload: ingredient });
   };
 
   const fetchIngredients = async () => {
