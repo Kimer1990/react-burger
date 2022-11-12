@@ -1,11 +1,10 @@
 const apiUrl = "https://norma.nomoreparties.space/api";
 
-const wrapperGetRequest = async (url) => {
+const makeRequest = async (url, options = {}) => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, options);
     if (response.ok) {
-      const { data } = await response.json();
-      return data;
+      return response.json();
     } else {
       throw new Error(`Ошибка HTTP: ${response.status}`);
     }
@@ -14,6 +13,10 @@ const wrapperGetRequest = async (url) => {
   }
 };
 
-export const getIngredients = async (url) => {
-  return wrapperGetRequest(`${apiUrl}/ingredients`);
+export const getIngredients = async () => {
+  return makeRequest(`${apiUrl}/ingredients`);
+};
+
+export const postOrder = async (data) => {
+  return makeRequest(`${apiUrl}/orders`, data);
 };

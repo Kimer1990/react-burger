@@ -1,51 +1,82 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useContext } from "react";
 import styles from "./burger-constructor.module.css";
-import PropTypes from "prop-types";
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { burgerListItemPropTypes } from "../../utils/prop-types";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../orderDetails/orderDetails";
+import { OrderContext } from "../.././services/orderContext";
+import { postOrder } from "../../utils/burger-api";
 
-export const BurgerConstructor = ({ ingredients }) => {
+export const BurgerConstructor = () => {
+  const [modalOpened, setModalOpened] = useState(false);
+  const [order, setOrder] = useState();
+
+  const { state, delIngredient } = useContext(OrderContext);
+
   const countSum = useMemo(() => {
-    return ingredients.reduce((acc, el) => acc + el.price, 0);
-  }, [ingredients]);
+    return (
+      state.fillings.reduce((acc, el) => acc + el.price, 0) +
+      state.bun.price * 2
+    );
+  }, [state]);
 
   const fillingList = useMemo(() => {
-    return ingredients.filter((item) => item.type !== "bun");
-  }, [ingredients]);
+    return state.fillings;
+  }, [state]);
 
-  const bunList = useMemo(() => {
-    return ingredients.filter((item) => item.type === "bun");
-  }, [ingredients]);
+  const bun = useMemo(() => {
+    return state.bun;
+  }, [state]);
 
-  const [modalOpened, setModalOpened] = useState(false);
+  const allId = useMemo(() => {
+    return [
+      state.bun._id,
+      ...state.fillings.map((item) => item._id),
+      state.bun._id,
+    ];
+  }, [state]);
 
-  const openModal = () => {
-    setModalOpened(true);
+  const makeOrder = async () => {
+    try {
+      const { success, order } = await postOrder({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ingredients: allId }),
+      });
+      if (success) {
+        setOrder(order.number);
+        setModalOpened(true);
+      } else alert("Не удалось оформить заказ :(");
+    } catch (error) {
+      console.error(error);
+      alert("Не удалось оформить заказ :(");
+    }
   };
 
-  const closeModal = () => {
+  const closeOrder = () => {
     setModalOpened(false);
   };
 
   return (
-    ingredients.length && (
-      <section className={`${styles.container} pl-4`}>
+    <section className={`${styles.container} pl-4`}>
+      {!!Object.keys(bun).length && (
         <div className="pl-8 pr-4 mb-4">
           <ConstructorElement
             type={"top"}
             isLocked={true}
-            text={bunList[0].name}
-            price={bunList[0].price}
-            thumbnail={bunList[0].image}
+            text={bun.name}
+            price={bun.price}
+            thumbnail={bun.image}
           />
         </div>
+      )}
+      {!!fillingList.length && (
         <ul className={`customs-scroll pr-4 ${styles.list}`}>
           {fillingList.map((item) => {
             return (
@@ -56,20 +87,25 @@ export const BurgerConstructor = ({ ingredients }) => {
                   text={item.name}
                   price={item.price}
                   thumbnail={item.image}
+                  handleClose={() => delIngredient(item)}
                 />
               </li>
             );
           })}
         </ul>
+      )}
+      {!!Object.keys(bun).length && (
         <div className="pl-8 pr-4 pt-4 pb-10">
           <ConstructorElement
             type={"bottom"}
             isLocked={true}
-            text={bunList[bunList.length - 1].name}
-            price={bunList[bunList.length - 1].price}
-            thumbnail={bunList[bunList.length - 1].image}
+            text={bun.name}
+            price={bun.price}
+            thumbnail={bun.image}
           />
         </div>
+      )}
+      {!!countSum && (
         <div className={`${styles.sum} pr-4`}>
           <div className="mr-10">
             <p className="mr-2 text text_type_digits-default">{countSum}</p>
@@ -79,21 +115,17 @@ export const BurgerConstructor = ({ ingredients }) => {
             htmlType="button"
             type="primary"
             size="large"
-            onClick={openModal}
+            onClick={makeOrder}
           >
             Оформить заказ
           </Button>
         </div>
-        {modalOpened && (
-          <Modal title="" closeModal={closeModal}>
-            <OrderDetails />
-          </Modal>
-        )}
-      </section>
-    )
+      )}
+      {modalOpened && (
+        <Modal title="" closeModal={closeOrder}>
+          <OrderDetails order={order} />
+        </Modal>
+      )}
+    </section>
   );
-};
-
-BurgerConstructor.propTypes = {
-  ingredients: PropTypes.arrayOf(burgerListItemPropTypes),
 };

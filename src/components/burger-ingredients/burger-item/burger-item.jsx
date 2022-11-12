@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   CurrencyIcon,
   Counter,
@@ -5,10 +6,14 @@ import {
 import styles from "./burger-item.module.css";
 import PropTypes from "prop-types";
 import { burgerListItemPropTypes } from "../../../utils/prop-types";
+import { OrderContext } from "../../../services/orderContext";
 
 export const BurgerItem = (props) => {
+  const { addIngredient } = useContext(OrderContext);
+
   const showModal = () => {
     props.openModal(props.menuItem);
+    addIngredient(props.menuItem);
   };
 
   return (
