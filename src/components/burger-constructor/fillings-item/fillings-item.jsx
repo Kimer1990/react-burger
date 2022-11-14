@@ -38,22 +38,12 @@ export const FillingsItem = ({ filling, index }) => {
       const clientOffsetY = monitor.getClientOffset().y;
 
       if (
-        dropMiddleY < clientOffsetY &&
-        item.filling.unicId !== filling.unicId &&
-        !(index - item.index === -1)
-      ) {
-        fillings.splice(item.index, 1);
-        fillings.splice(index, 0, item.filling);
-        dispatch({
-          type: UPDATE_INGREDIENTS_ORDER,
-          fillings: fillings,
-        });
-        item.index = index;
-      }
-      if (
-        dropMiddleY > clientOffsetY &&
-        item.filling.unicId !== filling.unicId &&
-        !(index - item.index === 1)
+        (dropMiddleY < clientOffsetY &&
+          item.filling.unicId !== filling.unicId &&
+          !(index - item.index === -1)) ||
+        (dropMiddleY > clientOffsetY &&
+          item.filling.unicId !== filling.unicId &&
+          !(index - item.index === 1))
       ) {
         fillings.splice(item.index, 1);
         fillings.splice(index, 0, item.filling);
