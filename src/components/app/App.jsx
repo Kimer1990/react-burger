@@ -2,81 +2,31 @@ import "./App.css";
 import { AppHeader } from "../app-header/app-header";
 import { BurgerConstructor } from "../burger-constructor/burger-constructor";
 import { BurgerIngredients } from "../burger-ingredients/burger-ingredients";
-import { useState, useEffect, useReducer } from "react";
-import { getIngredients } from "../../utils/burger-api";
-import { IngredientsContext } from "../.././services/ingredientsContext";
-import { OrderContext } from "../.././services/orderContext";
-
-const initialState = { bun: {}, fillings: [] };
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "add":
-      if (
-        action.payload.type === "bun" &&
-        action.payload._id !== state.bun._id
-      ) {
-        state.bun = action.payload;
-      } else if (
-        action.payload.type !== "bun" &&
-        !state.fillings.find((item) => item._id === action.payload._id)
-      ) {
-        state.fillings.push(action.payload);
-      }
-      return { bun: { ...state.bun }, fillings: [...state.fillings] };
-
-    case "del":
-      state.fillings = state.fillings.filter(
-        (item) => item._id !== action.payload._id
-      );
-      return { bun: { ...state.bun }, fillings: [...state.fillings] };
-
-    default:
-      return initialState;
-  }
-}
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchIngredients } from "../../services/actions/allIngredientsActions";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
-  const [ingredientsList, setIngridientsList] = useState([]);
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const addIngredient = (ingredient) => {
-    dispatch({ type: "add", payload: ingredient });
-  };
-
-  const delIngredient = (ingredient) => {
-    dispatch({ type: "del", payload: ingredient });
-  };
-
-  const fetchIngredients = async () => {
-    try {
-      const { data } = await getIngredients();
-      setIngridientsList(data);
-    } catch (error) {
-      console.error(error);
-      alert("Не удалось получить список ингридиентов :(");
-    }
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchIngredients();
-  }, []);
+    dispatch(fetchIngredients());
+  }, [dispatch]);
 
   return (
     <div className="App">
       <AppHeader />
-      <main>
-        <h2 className="text text_type_main-large mb-3 title mt-8">
-          Соберите бургер
-        </h2>
-        <OrderContext.Provider value={{ state, addIngredient, delIngredient }}>
-          <IngredientsContext.Provider value={{ ingredientsList }}>
-            <BurgerIngredients />
-          </IngredientsContext.Provider>
+      <DndProvider backend={HTML5Backend}>
+        <main>
+          <h2 className="text text_type_main-large mb-3 title mt-8">
+            Соберите бургер
+          </h2>
+          <BurgerIngredients />
           <BurgerConstructor />
-        </OrderContext.Provider>
-      </main>
+        </main>
+      </DndProvider>
     </div>
   );
 }

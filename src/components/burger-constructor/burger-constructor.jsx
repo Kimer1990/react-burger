@@ -1,70 +1,57 @@
-import { useMemo, useState, useContext } from "react";
+import { useMemo, useState, useCallback } from "react";
 import styles from "./burger-constructor.module.css";
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../orderDetails/orderDetails";
-import { OrderContext } from "../.././services/orderContext";
-import { postOrder } from "../../utils/burger-api";
+import { useDispatch, useSelector } from "react-redux";
+import { FillingsItem } from "./fillings-item/fillings-item";
+import { makeOrder } from "../../services/actions/orderActions";
+import { addIngredient } from "../../services/actions/orderIngredientsActions";
+import { useDrop } from "react-dnd";
 
 export const BurgerConstructor = () => {
-  const [modalOpened, setModalOpened] = useState(false);
-  const [order, setOrder] = useState();
+  const dispatch = useDispatch();
 
-  const { state, delIngredient } = useContext(OrderContext);
+  const [modalOpened, setModalOpened] = useState(false);
+
+  const { fillings, bun } = useSelector((state) => state.orderIngredients);
 
   const countSum = useMemo(() => {
-    return (
-      state.fillings.reduce((acc, el) => acc + el.price, 0) +
-      state.bun.price * 2
-    );
-  }, [state]);
-
-  const fillingList = useMemo(() => {
-    return state.fillings;
-  }, [state]);
-
-  const bun = useMemo(() => {
-    return state.bun;
-  }, [state]);
+    return fillings.reduce((acc, el) => acc + el.price, 0) + bun.price * 2;
+  }, [fillings, bun]);
 
   const allId = useMemo(() => {
-    return [
-      state.bun._id,
-      ...state.fillings.map((item) => item._id),
-      state.bun._id,
-    ];
-  }, [state]);
+    return [bun._id, ...fillings.map((item) => item._id), bun._id];
+  }, [fillings, bun]);
 
-  const makeOrder = async () => {
-    try {
-      const { success, order } = await postOrder({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ingredients: allId }),
-      });
-      if (success) {
-        setOrder(order.number);
-        setModalOpened(true);
-      } else alert("Не удалось оформить заказ :(");
-    } catch (error) {
-      console.error(error);
-      alert("Не удалось оформить заказ :(");
-    }
-  };
+  const openOrder = useCallback(() => {
+    dispatch(makeOrder(allId));
+    setModalOpened(true);
+  }, [dispatch, allId]);
 
   const closeOrder = () => {
     setModalOpened(false);
   };
 
+  const [{ isHover }, drop] = useDrop({
+    accept: "ingredients",
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+    drop(item) {
+      dispatch(addIngredient(item));
+    },
+  });
+
   return (
-    <section className={`${styles.container} pl-4`}>
+    <section
+      ref={drop}
+      className={`${styles.container} ${isHover ? styles.onHover : ""} pl-4`}
+    >
       {!!Object.keys(bun).length && (
         <div className="pl-8 pr-4 mb-4">
           <ConstructorElement
@@ -76,22 +63,15 @@ export const BurgerConstructor = () => {
           />
         </div>
       )}
-      {!!fillingList.length && (
+      {!!fillings.length && (
         <ul className={`customs-scroll pr-4 ${styles.list}`}>
-          {fillingList.map((item) => {
-            return (
-              <li className={styles.li} key={item._id}>
-                <DragIcon className="mr-3" style={{ cursor: "pointer" }} />
-                <ConstructorElement
-                  isLocked={false}
-                  text={item.name}
-                  price={item.price}
-                  thumbnail={item.image}
-                  handleClose={() => delIngredient(item)}
-                />
-              </li>
-            );
-          })}
+          {fillings.map((item, index) => (
+            <FillingsItem
+              key={item.unicId}
+              index={index}
+              filling={item}
+            ></FillingsItem>
+          ))}
         </ul>
       )}
       {!!Object.keys(bun).length && (
@@ -115,7 +95,7 @@ export const BurgerConstructor = () => {
             htmlType="button"
             type="primary"
             size="large"
-            onClick={makeOrder}
+            onClick={openOrder}
           >
             Оформить заказ
           </Button>
@@ -123,7 +103,7 @@ export const BurgerConstructor = () => {
       )}
       {modalOpened && (
         <Modal title="" closeModal={closeOrder}>
-          <OrderDetails order={order} />
+          <OrderDetails />
         </Modal>
       )}
     </section>

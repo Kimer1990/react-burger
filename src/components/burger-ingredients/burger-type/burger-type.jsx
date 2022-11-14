@@ -13,7 +13,6 @@ export const BurgerType = (props) => {
             menuItem={item}
             openModal={props.openModal}
             key={item._id}
-            amount={1}
           ></BurgerItem>
         ))}
       </ul>
