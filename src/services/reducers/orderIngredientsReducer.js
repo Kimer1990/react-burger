@@ -14,7 +14,6 @@ const initialState = {
 };
 
 function countSum(fillings, bun) {
-  console.log(fillings, bun);
   return fillings.reduce((acc, el) => acc + el.price, 0) + bun.price * 2;
 }
 
