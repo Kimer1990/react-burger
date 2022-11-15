@@ -17,10 +17,13 @@ export const fetchIngredients = () => async (dispatch) => {
         type: GET_INGREDIENTS_SUCCESS,
         data: data.map((ingredient) => ({ ...ingredient, qnt: 0 })),
       });
-    } else alert("Не удалось получить список ингридиентов :(");
+    } else {
+      dispatch({ type: GET_INGREDIENTS_FAILED });
+      alert("Не удалось получить список ингридиентов :(");
+    }
   } catch (error) {
     dispatch({ type: GET_INGREDIENTS_FAILED });
     console.error(error);
-    alert("Не удалось получить список ингридиентов :(");
+    alert(`Не удалось получить список ингридиентов. ${error.message}`);
   }
 };

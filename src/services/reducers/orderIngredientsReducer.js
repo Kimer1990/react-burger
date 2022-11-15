@@ -10,24 +10,40 @@ const { BUN } = ingredientTypes;
 const initialState = {
   bun: {},
   fillings: [],
+  orderSum: null,
 };
+
+function countSum(fillings, bun) {
+  console.log(fillings, bun);
+  return fillings.reduce((acc, el) => acc + el.price, 0) + bun.price * 2;
+}
 
 export const orderIngredientsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_INGREDIENT_TO_ORDER:
       if (action.item.type === BUN) {
-        return { ...state, bun: action.item };
+        const newBun = action.item;
+        return {
+          ...state,
+          bun: newBun,
+          orderSum: countSum(state.fillings, newBun),
+        };
       }
-      return { ...state, fillings: [...state.fillings, action.item] };
-
-    case DEL_INGREDIENT_FROM_ORDER:
+      const addFillings = [...state.fillings, action.item];
       return {
         ...state,
-        fillings: [
-          ...state.fillings.filter(
-            (item) => item.unicId !== action.item.unicId
-          ),
-        ],
+        fillings: addFillings,
+        orderSum: countSum(addFillings, state.bun),
+      };
+
+    case DEL_INGREDIENT_FROM_ORDER:
+      const delFillings = [
+        ...state.fillings.filter((item) => item.unicId !== action.item.unicId),
+      ];
+      return {
+        ...state,
+        fillings: delFillings,
+        orderSum: countSum(delFillings, state.bun),
       };
 
     case UPDATE_INGREDIENTS_ORDER:

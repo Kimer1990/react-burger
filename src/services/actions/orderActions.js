@@ -19,10 +19,13 @@ export const makeOrder = (data) => async (dispatch) => {
         type: GET_ORDER_SUCCESS,
         orderNum: order.number,
       });
-    } else alert("Не удалось оформить заказ :(");
+    } else {
+      dispatch({ type: GET_ORDER_FAILED });
+      alert("Не удалось оформить заказ :(");
+    }
   } catch (error) {
     dispatch({ type: GET_ORDER_FAILED });
     console.error(error);
-    alert("Не удалось оформить заказ :(");
+    alert(`Не удалось оформить заказ. ${error.message}`);
   }
 };

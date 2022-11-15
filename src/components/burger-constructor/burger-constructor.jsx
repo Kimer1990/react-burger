@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import styles from "./burger-constructor.module.css";
 import {
   Button,
@@ -18,20 +18,16 @@ export const BurgerConstructor = () => {
 
   const [modalOpened, setModalOpened] = useState(false);
 
-  const { fillings, bun } = useSelector((state) => state.orderIngredients);
-
-  const countSum = useMemo(() => {
-    return fillings.reduce((acc, el) => acc + el.price, 0) + bun.price * 2;
-  }, [fillings, bun]);
-
-  const allId = useMemo(() => {
-    return [bun._id, ...fillings.map((item) => item._id), bun._id];
-  }, [fillings, bun]);
+  const { fillings, bun, orderSum } = useSelector(
+    (state) => state.orderIngredients
+  );
 
   const openOrder = useCallback(() => {
+    const allId = [bun._id, ...fillings.map((item) => item._id), bun._id];
+    console.log(allId);
     dispatch(makeOrder(allId));
     setModalOpened(true);
-  }, [dispatch, allId]);
+  }, [dispatch, fillings, bun]);
 
   const closeOrder = () => {
     setModalOpened(false);
@@ -85,10 +81,10 @@ export const BurgerConstructor = () => {
           />
         </div>
       )}
-      {!!countSum && (
+      {!!orderSum && (
         <div className={`${styles.sum} pr-4`}>
           <div className="mr-10">
-            <p className="mr-2 text text_type_digits-default">{countSum}</p>
+            <p className="mr-2 text text_type_digits-default">{orderSum}</p>
             <CurrencyIcon type="primary" />
           </div>
           <Button

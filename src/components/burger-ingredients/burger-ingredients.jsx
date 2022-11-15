@@ -14,7 +14,7 @@ import {
 export const BurgerIngredients = () => {
   const dispatch = useDispatch();
 
-  const { BUN, MAIN, SAUCE } = ingredientTypes;
+  const { BUN, SAUCE, MAIN } = ingredientTypes;
 
   //Состояния
   const [current, setCurrent] = useState({ id: "bun", name: "Булки" });
@@ -26,6 +26,7 @@ export const BurgerIngredients = () => {
 
   const tabsList = useSelector((state) => state.allIngredients.ingredientTabs);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   const burgersBun = useMemo(() => {
     return ingredientsList.filter((item) => item.type === BUN);
   }, [ingredientsList]);
@@ -35,27 +36,42 @@ export const BurgerIngredients = () => {
   const burgersMain = useMemo(() => {
     return ingredientsList.filter((item) => item.type === MAIN);
   }, [ingredientsList]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   //Активный элемент списка
   const tabsRef = useRef();
 
-  const bunTab = document.getElementById(BUN);
-  const sauceTab = document.getElementById(SAUCE);
-  const mainTab = document.getElementById(MAIN);
+  const bunTab = useRef();
+  const sauceTab = useRef();
+  const mainTab = useRef();
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   const toggleTab = useCallback((tab) => {
     setCurrent(tab);
-    document.querySelector(`#${tab.id}`).scrollIntoView({
+    tabsRef.current.scrollTo({
       behavior: "smooth",
+      top:
+        (tab.id === BUN
+          ? bunTab.current.offsetTop
+          : tab.id === SAUCE
+          ? sauceTab.current.offsetTop
+          : tab.id === MAIN && mainTab.current.offsetTop) -
+        tabsRef.current.offsetTop,
     });
   }, []);
 
   const scrollIngredients = useCallback(() => {
     const tabsY = tabsRef.current.getBoundingClientRect().top;
 
-    const bunTabY = Math.abs(bunTab.getBoundingClientRect().top - tabsY);
-    const sauceTabY = Math.abs(sauceTab.getBoundingClientRect().top - tabsY);
-    const mainTabY = Math.abs(mainTab.getBoundingClientRect().top - tabsY);
+    const bunTabY = Math.abs(
+      bunTab.current.getBoundingClientRect().top - tabsY
+    );
+    const sauceTabY = Math.abs(
+      sauceTab.current.getBoundingClientRect().top - tabsY
+    );
+    const mainTabY = Math.abs(
+      mainTab.current.getBoundingClientRect().top - tabsY
+    );
 
     if (bunTabY < sauceTabY && bunTabY < mainTabY) {
       setCurrent(tabsList.find((t) => t.id === BUN));
@@ -65,6 +81,7 @@ export const BurgerIngredients = () => {
       setCurrent(tabsList.find((t) => t.id === MAIN));
     }
   }, [bunTab, sauceTab, mainTab, tabsList]);
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   useEffect(() => {
     const tabsNode = tabsRef.current;
@@ -94,6 +111,46 @@ export const BurgerIngredients = () => {
     setModalOpened(false);
   };
 
+  //Блоки с привязками
+  const BunBlock = ({ innerRef }) => {
+    return (
+      <div ref={innerRef}>
+        <BurgerType
+          id="bun"
+          openModal={showDetails}
+          list={burgersBun}
+          title="Булки"
+        />
+      </div>
+    );
+  };
+
+  const SauceBlock = ({ innerRef }) => {
+    return (
+      <div ref={innerRef}>
+        <BurgerType
+          id="sauce"
+          openModal={showDetails}
+          list={burgersSauce}
+          title="Соусы"
+        />
+      </div>
+    );
+  };
+
+  const MainBlock = ({ innerRef }) => {
+    return (
+      <div ref={innerRef}>
+        <BurgerType
+          id="main"
+          openModal={showDetails}
+          list={burgersMain}
+          title="Начинки"
+        />
+      </div>
+    );
+  };
+
   return (
     <section className={styles.container}>
       <div className={`${styles.variants} mb-10`}>
@@ -110,24 +167,9 @@ export const BurgerIngredients = () => {
       </div>
 
       <div ref={tabsRef} className={`customs-scroll ${styles.items}`}>
-        <BurgerType
-          id="bun"
-          openModal={showDetails}
-          list={burgersBun}
-          title="Булки"
-        />
-        <BurgerType
-          id="sauce"
-          openModal={showDetails}
-          list={burgersSauce}
-          title="Соусы"
-        />
-        <BurgerType
-          id="main"
-          openModal={showDetails}
-          list={burgersMain}
-          title="Начинки"
-        />
+        <BunBlock innerRef={bunTab}></BunBlock>
+        <SauceBlock innerRef={sauceTab}></SauceBlock>
+        <MainBlock innerRef={mainTab}></MainBlock>
       </div>
 
       {modalOpened && (
