@@ -24,7 +24,6 @@ export const BurgerConstructor = () => {
 
   const openOrder = useCallback(() => {
     const allId = [bun._id, ...fillings.map((item) => item._id), bun._id];
-    console.log(allId);
     dispatch(makeOrder(allId));
     setModalOpened(true);
   }, [dispatch, fillings, bun]);
