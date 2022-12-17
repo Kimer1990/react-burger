@@ -1,70 +1,52 @@
-import { useMemo, useState, useContext } from "react";
+import { useState, useCallback } from "react";
 import styles from "./burger-constructor.module.css";
 import {
   Button,
   ConstructorElement,
   CurrencyIcon,
-  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Modal } from "../modal/modal";
 import { OrderDetails } from "../orderDetails/orderDetails";
-import { OrderContext } from "../.././services/orderContext";
-import { postOrder } from "../../utils/burger-api";
+import { useDispatch, useSelector } from "react-redux";
+import { FillingsItem } from "./fillings-item/fillings-item";
+import { makeOrder } from "../../services/actions/orderActions";
+import { addIngredient } from "../../services/actions/orderIngredientsActions";
+import { useDrop } from "react-dnd";
 
 export const BurgerConstructor = () => {
+  const dispatch = useDispatch();
+
   const [modalOpened, setModalOpened] = useState(false);
-  const [order, setOrder] = useState();
 
-  const { state, delIngredient } = useContext(OrderContext);
+  const { fillings, bun, orderSum } = useSelector(
+    (state) => state.orderIngredients
+  );
 
-  const countSum = useMemo(() => {
-    return (
-      state.fillings.reduce((acc, el) => acc + el.price, 0) +
-      state.bun.price * 2
-    );
-  }, [state]);
-
-  const fillingList = useMemo(() => {
-    return state.fillings;
-  }, [state]);
-
-  const bun = useMemo(() => {
-    return state.bun;
-  }, [state]);
-
-  const allId = useMemo(() => {
-    return [
-      state.bun._id,
-      ...state.fillings.map((item) => item._id),
-      state.bun._id,
-    ];
-  }, [state]);
-
-  const makeOrder = async () => {
-    try {
-      const { success, order } = await postOrder({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ingredients: allId }),
-      });
-      if (success) {
-        setOrder(order.number);
-        setModalOpened(true);
-      } else alert("Не удалось оформить заказ :(");
-    } catch (error) {
-      console.error(error);
-      alert("Не удалось оформить заказ :(");
-    }
-  };
+  const openOrder = useCallback(() => {
+    const allId = [bun._id, ...fillings.map((item) => item._id), bun._id];
+    dispatch(makeOrder(allId));
+    setModalOpened(true);
+  }, [dispatch, fillings, bun]);
 
   const closeOrder = () => {
     setModalOpened(false);
   };
 
+  const [{ isHover }, drop] = useDrop({
+    accept: "ingredients",
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+    drop(item) {
+      dispatch(addIngredient(item));
+    },
+  });
+
   return (
-    <section className={`${styles.container} pl-4`}>
+    <section
+      ref={drop}
+      className={`${styles.container} ${isHover ? styles.onHover : ""} pl-4`}
+    >
       {!!Object.keys(bun).length && (
         <div className="pl-8 pr-4 mb-4">
           <ConstructorElement
@@ -76,22 +58,15 @@ export const BurgerConstructor = () => {
           />
         </div>
       )}
-      {!!fillingList.length && (
+      {!!fillings.length && (
         <ul className={`customs-scroll pr-4 ${styles.list}`}>
-          {fillingList.map((item) => {
-            return (
-              <li className={styles.li} key={item._id}>
-                <DragIcon className="mr-3" style={{ cursor: "pointer" }} />
-                <ConstructorElement
-                  isLocked={false}
-                  text={item.name}
-                  price={item.price}
-                  thumbnail={item.image}
-                  handleClose={() => delIngredient(item)}
-                />
-              </li>
-            );
-          })}
+          {fillings.map((item, index) => (
+            <FillingsItem
+              key={item.unicId}
+              index={index}
+              filling={item}
+            ></FillingsItem>
+          ))}
         </ul>
       )}
       {!!Object.keys(bun).length && (
@@ -105,17 +80,17 @@ export const BurgerConstructor = () => {
           />
         </div>
       )}
-      {!!countSum && (
+      {!!orderSum && (
         <div className={`${styles.sum} pr-4`}>
           <div className="mr-10">
-            <p className="mr-2 text text_type_digits-default">{countSum}</p>
+            <p className="mr-2 text text_type_digits-default">{orderSum}</p>
             <CurrencyIcon type="primary" />
           </div>
           <Button
             htmlType="button"
             type="primary"
             size="large"
-            onClick={makeOrder}
+            onClick={openOrder}
           >
             Оформить заказ
           </Button>
@@ -123,7 +98,7 @@ export const BurgerConstructor = () => {
       )}
       {modalOpened && (
         <Modal title="" closeModal={closeOrder}>
-          <OrderDetails order={order} />
+          <OrderDetails />
         </Modal>
       )}
     </section>

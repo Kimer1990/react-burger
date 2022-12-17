@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import {
   CurrencyIcon,
   Counter,
@@ -6,38 +5,32 @@ import {
 import styles from "./burger-item.module.css";
 import PropTypes from "prop-types";
 import { burgerListItemPropTypes } from "../../../utils/prop-types";
-import { OrderContext } from "../../../services/orderContext";
+import { useDrag } from "react-dnd";
 
 export const BurgerItem = (props) => {
-  const { addIngredient } = useContext(OrderContext);
+  const item = props.menuItem;
 
   const showModal = () => {
     props.openModal(props.menuItem);
-    addIngredient(props.menuItem);
   };
 
+  const [, drag] = useDrag({
+    type: "ingredients",
+    item: item,
+  });
+
   return (
-    <li className={styles.card} key={props.menuItem._id} onClick={showModal}>
-      <img
-        className="ml-4 mr-4"
-        src={props.menuItem.image}
-        alt={props.menuItem.name}
-      />
+    <li ref={drag} className={styles.card} key={item._id} onClick={showModal}>
+      <img className="ml-4 mr-4" src={item.image} alt={item.name} />
       <div className={styles.price}>
-        <p className="mr-2 text text_type_digits-default">
-          {props.menuItem.price}
-        </p>
+        <p className="mr-2 text text_type_digits-default">{item.price}</p>
         <CurrencyIcon type="primary" />
       </div>
       <p className={`mt-2 text text_type_main-small ${styles.desc}`}>
-        {props.menuItem.name}
+        {item.name}
       </p>
-      {props.amount && (
-        <Counter
-          className={styles.counter}
-          count={props.amount}
-          size="default"
-        />
+      {!!item.qnt && (
+        <Counter className={styles.counter} count={item.qnt} size="default" />
       )}
     </li>
   );
@@ -46,5 +39,4 @@ export const BurgerItem = (props) => {
 BurgerItem.propTypes = {
   menuItem: burgerListItemPropTypes,
   openModal: PropTypes.func.isRequired,
-  amount: PropTypes.number.isRequired,
 };

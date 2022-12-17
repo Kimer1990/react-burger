@@ -10,7 +10,8 @@ import styles from "./app-header.module.css";
 import { menuConst } from "../../utils/constant";
 
 export const AppHeader = () => {
-  const [active, setActive] = useState(menuConst.create);
+  const { CREATE, ORDERS, PROFILE } = menuConst;
+  const [active, setActive] = useState(CREATE);
 
   return (
     <header className={styles.header}>
@@ -18,24 +19,20 @@ export const AppHeader = () => {
         <ul className={styles.list}>
           <li className={`${styles.item} pt-4 pb-4 pr-5 pl-5 mr-2`}>
             <NavItem
-              name={menuConst.create}
-              isActive={active === menuConst.create}
+              name={CREATE}
+              isActive={active === CREATE}
               update={setActive}
             >
-              <BurgerIcon
-                type={active === menuConst.create ? "primary" : "secondary"}
-              />
+              <BurgerIcon type={active === CREATE ? "primary" : "secondary"} />
             </NavItem>
           </li>
           <li className={`${styles.item} pt-4 pb-4 pr-5 pl-5`}>
             <NavItem
-              name={menuConst.orders}
-              isActive={active === menuConst.orders}
+              name={ORDERS}
+              isActive={active === ORDERS}
               update={setActive}
             >
-              <ListIcon
-                type={active === menuConst.orders ? "primary" : "secondary"}
-              />
+              <ListIcon type={active === ORDERS ? "primary" : "secondary"} />
             </NavItem>
           </li>
           <li className={styles.logo}>
@@ -43,12 +40,12 @@ export const AppHeader = () => {
           </li>
           <li className={`${styles.item} pt-4 pb-4 pr-5 pl-5`}>
             <NavItem
-              name={menuConst.profile}
-              isActive={active === menuConst.profile}
+              name={PROFILE}
+              isActive={active === PROFILE}
               update={setActive}
             >
               <ProfileIcon
-                type={active === menuConst.profile ? "primary" : "secondary"}
+                type={active === PROFILE ? "primary" : "secondary"}
               />
             </NavItem>
           </li>

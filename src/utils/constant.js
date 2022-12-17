@@ -1,5 +1,11 @@
 export const menuConst = {
-  create: "Конструктор",
-  orders: "Лента заказов",
-  profile: "Личный кабинет"
-}
+  CREATE: "Конструктор",
+  ORDERS: "Лента заказов",
+  PROFILE: "Личный кабинет",
+};
+
+export const ingredientTypes = {
+  BUN: "bun",
+  SAUCE: "sauce",
+  MAIN: "main",
+};
