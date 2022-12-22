@@ -2,23 +2,14 @@ import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BurgerType } from "./burger-type/burger-type";
 import styles from "./burger-ingredients.module.css";
-import { Modal } from "../modal/modal";
-import { IngredientDetails } from "../ingredientDetails/ingredientDetails";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ingredientTypes } from "../../utils/constant";
-import {
-  SET_INGREDIENT,
-  CLEAR_INGREDIENT,
-} from "../../services/actions/currentIngredientActions";
 
 export const BurgerIngredients = () => {
-  const dispatch = useDispatch();
-
   const { BUN, SAUCE, MAIN } = ingredientTypes;
 
   //Состояния
   const [current, setCurrent] = useState({ id: "bun", name: "Булки" });
-  const [modalOpened, setModalOpened] = useState(false);
 
   const ingredientsList = useSelector(
     (state) => state.allIngredients.ingredientsList
@@ -92,35 +83,11 @@ export const BurgerIngredients = () => {
     };
   }, [scrollIngredients]);
 
-  //Модальные окна
-  const showDetails = useCallback(
-    (item) => {
-      dispatch({
-        type: SET_INGREDIENT,
-        item,
-      });
-      setModalOpened(true);
-    },
-    [dispatch]
-  );
-
-  const closeDetails = () => {
-    dispatch({
-      type: CLEAR_INGREDIENT,
-    });
-    setModalOpened(false);
-  };
-
   //Блоки с привязками
   const BunBlock = ({ innerRef }) => {
     return (
       <div ref={innerRef}>
-        <BurgerType
-          id="bun"
-          openModal={showDetails}
-          list={burgersBun}
-          title="Булки"
-        />
+        <BurgerType id="bun" list={burgersBun} title="Булки" />
       </div>
     );
   };
@@ -128,12 +95,7 @@ export const BurgerIngredients = () => {
   const SauceBlock = ({ innerRef }) => {
     return (
       <div ref={innerRef}>
-        <BurgerType
-          id="sauce"
-          openModal={showDetails}
-          list={burgersSauce}
-          title="Соусы"
-        />
+        <BurgerType id="sauce" list={burgersSauce} title="Соусы" />
       </div>
     );
   };
@@ -141,12 +103,7 @@ export const BurgerIngredients = () => {
   const MainBlock = ({ innerRef }) => {
     return (
       <div ref={innerRef}>
-        <BurgerType
-          id="main"
-          openModal={showDetails}
-          list={burgersMain}
-          title="Начинки"
-        />
+        <BurgerType id="main" list={burgersMain} title="Начинки" />
       </div>
     );
   };
@@ -171,12 +128,6 @@ export const BurgerIngredients = () => {
         <SauceBlock innerRef={sauceTab}></SauceBlock>
         <MainBlock innerRef={mainTab}></MainBlock>
       </div>
-
-      {modalOpened && (
-        <Modal title="Детали ингридиента" closeModal={closeDetails}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </section>
   );
 };

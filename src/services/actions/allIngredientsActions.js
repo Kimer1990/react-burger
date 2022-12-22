@@ -1,4 +1,4 @@
-import { getIngredients } from "../../utils/burger-api";
+import { getData } from "../../utils/burger-api";
 
 export const GET_INGREDIENTS_REQUEST = "GET_INGREDIENTS_REQUEST";
 export const GET_INGREDIENTS_SUCCESS = "GET_INGREDIENTS_SUCCESS";
@@ -11,7 +11,7 @@ export const RESSET_BUNS_AMOUNT = "RESSET_BUNS_AMOUNT";
 export const fetchIngredients = () => async (dispatch) => {
   dispatch({ type: GET_INGREDIENTS_REQUEST });
   try {
-    const { success, data } = await getIngredients();
+    const { success, data } = await getData("ingredients");
     if (success) {
       dispatch({
         type: GET_INGREDIENTS_SUCCESS,

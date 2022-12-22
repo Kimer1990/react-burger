@@ -1,4 +1,4 @@
-import { postOrder } from "../../utils/burger-api";
+import { postData } from "../../utils/burger-api";
 
 export const GET_ORDER_REQUEST = "GET_ORDER_REQUEST";
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
@@ -7,13 +7,7 @@ export const GET_ORDER_FAILED = "GET_ORDER_FAILED";
 export const makeOrder = (data) => async (dispatch) => {
   dispatch({ type: GET_ORDER_REQUEST });
   try {
-    const { success, order } = await postOrder({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ingredients: data }),
-    });
+    const { success, order } = await postData("orders", data);
     if (success) {
       dispatch({
         type: GET_ORDER_SUCCESS,
