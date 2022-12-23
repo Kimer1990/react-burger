@@ -27,7 +27,6 @@ export const BurgerConstructor = () => {
 
   const openOrder = useCallback(() => {
     if (!loginSuccess) {
-      console.log("++");
       history.push("/login");
     } else {
       const allId = [bun._id, ...fillings.map((item) => item._id), bun._id];

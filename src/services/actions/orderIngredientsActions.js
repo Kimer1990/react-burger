@@ -10,6 +10,7 @@ import {
 export const ADD_INGREDIENT_TO_ORDER = "ADD_INGREDIENT_TO_ORDER";
 export const DEL_INGREDIENT_FROM_ORDER = "DEL_INGREDIENT_FROM_ORDER";
 export const UPDATE_INGREDIENTS_ORDER = "UPDATE_INGREDIENTS_ORDER";
+export const CLEAN_INGREDIENTS_ORDER = "CLEAN_INGREDIENTS_ORDER";
 
 const { BUN } = ingredientTypes;
 
@@ -32,6 +33,10 @@ export function delIngredientFromOrder(item) {
 
 export function updateIngredientOrder(fillings) {
   return { type: UPDATE_INGREDIENTS_ORDER, fillings: fillings };
+}
+
+export function cleanIngredientOrder() {
+  return { type: CLEAN_INGREDIENTS_ORDER };
 }
 
 export const addIngredient = (ingredient) => (dispatch) => {

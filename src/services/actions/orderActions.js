@@ -1,4 +1,5 @@
 import { postData } from "../../utils/burger-api";
+import { cleanIngredientOrder } from "./orderIngredientsActions";
 
 export const GET_ORDER_REQUEST = "GET_ORDER_REQUEST";
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
@@ -25,6 +26,7 @@ export const makeOrder = (data) => async (dispatch) => {
     const { success, order } = await postData("orders", data);
     if (success) {
       dispatch(getOrderSuccess(order));
+      dispatch(cleanIngredientOrder());
     } else {
       dispatch(getOrderFailed());
       alert("Не удалось оформить заказ :(");

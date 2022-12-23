@@ -7,6 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const AppHeader = () => {
   const location = useLocation();
@@ -30,7 +31,9 @@ export const AppHeader = () => {
             </NavItem>
           </li>
           <li className={styles.logo}>
-            <Logo />
+            <Link to="/">
+              <Logo />
+            </Link>
           </li>
           <li className={`${styles.item} pt-4 pb-4 pr-5 pl-5`}>
             <NavItem name="Личный кабинет" link="/profile">

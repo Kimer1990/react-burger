@@ -3,6 +3,7 @@ import {
   ADD_INGREDIENT_TO_ORDER,
   DEL_INGREDIENT_FROM_ORDER,
   UPDATE_INGREDIENTS_ORDER,
+  CLEAN_INGREDIENTS_ORDER,
 } from "../actions/orderIngredientsActions";
 
 const { BUN } = ingredientTypes;
@@ -50,6 +51,9 @@ export const orderIngredientsReducer = (state = initialState, action) => {
         ...state,
         fillings: action.fillings,
       };
+
+    case CLEAN_INGREDIENTS_ORDER:
+      return initialState;
     default:
       return state;
   }
