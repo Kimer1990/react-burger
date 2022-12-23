@@ -9,9 +9,10 @@ import { useCallback, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut, patchData } from "../../utils/burger-api";
+import { useForm } from "../../hooks/useForm";
 import {
   getUserWithToken,
-  TOGGLE_USER_AUTH_CHECKED,
+  toggleUserAuthChecked,
 } from "../../services/actions/userActions";
 
 export const ProfilePage = () => {
@@ -21,43 +22,51 @@ export const ProfilePage = () => {
   const [hasControls, setControls] = useState(false);
 
   const { email, name } = useSelector((state) => state.user.userInfo);
-  const [form, setValue] = useState({ name: name, email: email, password: "" });
+  const { form, handleChange, setForm } = useForm({
+    name: name,
+    email: email,
+    password: "",
+  });
 
   useEffect(() => {
-    setValue({ name: name, email: email, password: "" });
-  }, [dispatch, name, email]);
+    setForm({ name: name, email: email, password: "" });
+  }, [dispatch, name, email, setForm]);
 
   const inputsChange = (e) => {
     console.log(e.target);
-    setValue({ ...form, [e.target.name]: e.target.value });
+    handleChange(e);
     if (!hasControls) {
       setControls(true);
     }
   };
 
-  const postUserData = useCallback(async () => {
-    if (form.email === "" || form.name === "") {
-      alert("Введены неверные данные");
-      returnUserData();
-      return;
-    }
-    await patchData("auth/user", form);
-    await dispatch(getUserWithToken());
-    setControls(false);
+  const postUserData = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (form.email === "" || form.name === "") {
+        alert("Введены неверные данные");
+        returnUserData();
+        return;
+      }
+      await patchData("auth/user", form);
+      await dispatch(getUserWithToken());
+      setControls(false);
+    },
     // eslint-disable-next-line
-  }, [form, dispatch, name, email]);
+    [form, dispatch, name, email]
+  );
 
   const returnUserData = useCallback(() => {
-    setValue({ ...form, email, name });
+    setForm({ ...form, email, name });
     setControls(false);
-  }, [form, email, name]);
+  }, [form, email, name, setForm]);
 
   const logoutUser = useCallback(
     async (event) => {
       event.preventDefault();
       await logOut();
       if (isAuthChecked) {
-        dispatch({ type: TOGGLE_USER_AUTH_CHECKED });
+        dispatch(toggleUserAuthChecked());
       }
       history.replace({ pathname: "/login", state: { from: "/login" } });
     },
@@ -101,65 +110,57 @@ export const ProfilePage = () => {
       <div className={styles.content}>
         <Switch>
           <Route path="/profile" exact={true}>
-            <div className="mt-6">
-              <Input
-                type={"text"}
-                placeholder={"Имя"}
-                size={"default"}
-                value={form.name}
-                name={"name"}
-                icon="EditIcon"
-                autoComplete="off"
-                onChange={inputsChange}
-              />
-            </div>
-
-            <div className="mt-6">
-              <EmailInput
-                type={"email"}
-                placeholder={"Логин"}
-                size={"default"}
-                value={form.email}
-                name={"email"}
-                icon="EditIcon"
-                autoComplete="off"
-                onChange={inputsChange}
-              />
-            </div>
-
-            <div className="mt-6">
-              <Input
-                type={"password"}
-                placeholder={"Пароль"}
-                size={"default"}
-                value={form.password}
-                name={"password"}
-                icon="EditIcon"
-                autoComplete="off"
-                onChange={inputsChange}
-              />
-            </div>
-
-            {hasControls && (
-              <div className={`mt-6 ${styles.controls}`}>
-                <Button
-                  htmlType="button"
-                  type="secondary"
-                  size="large"
-                  onClick={returnUserData}
-                >
-                  Отмена
-                </Button>
-                <Button
-                  htmlType="button"
-                  type="primary"
-                  size="large"
-                  onClick={postUserData}
-                >
-                  Сохранить
-                </Button>
+            <form onSubmit={postUserData} onReset={returnUserData}>
+              <div className="mt-6">
+                <Input
+                  type={"text"}
+                  placeholder={"Имя"}
+                  size={"default"}
+                  value={form.name}
+                  name={"name"}
+                  icon="EditIcon"
+                  autoComplete="off"
+                  onChange={inputsChange}
+                />
               </div>
-            )}
+
+              <div className="mt-6">
+                <EmailInput
+                  type={"email"}
+                  placeholder={"Логин"}
+                  size={"default"}
+                  value={form.email}
+                  name={"email"}
+                  icon="EditIcon"
+                  autoComplete="off"
+                  onChange={inputsChange}
+                />
+              </div>
+
+              <div className="mt-6">
+                <Input
+                  type={"password"}
+                  placeholder={"Пароль"}
+                  size={"default"}
+                  value={form.password}
+                  name={"password"}
+                  icon="EditIcon"
+                  autoComplete="off"
+                  onChange={inputsChange}
+                />
+              </div>
+
+              {hasControls && (
+                <div className={`mt-6 ${styles.controls}`}>
+                  <Button htmlType="reset" type="secondary" size="large">
+                    Отмена
+                  </Button>
+                  <Button htmlType="submit" type="primary" size="large">
+                    Сохранить
+                  </Button>
+                </div>
+              )}
+            </form>
           </Route>
         </Switch>
       </div>

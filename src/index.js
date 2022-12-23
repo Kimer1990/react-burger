@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./components/app/App";
+import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";

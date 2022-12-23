@@ -8,21 +8,51 @@ export const INCREASE_INGREDIENTS_AMOUNT = "INCREASE_INGREDIENTS_AMOUNT";
 export const DECREASE_INGREDIENTS_AMOUNT = "DECREASE_INGREDIENTS_AMOUNT";
 export const RESSET_BUNS_AMOUNT = "RESSET_BUNS_AMOUNT";
 
+export function getIngredientRequest() {
+  return { type: GET_INGREDIENTS_REQUEST };
+}
+
+export function getIngredientSuccess(data) {
+  return {
+    type: GET_INGREDIENTS_SUCCESS,
+    data: data.map((ingredient) => ({ ...ingredient, qnt: 0 })),
+  };
+}
+
+export function getIngredientFailed() {
+  return { type: GET_INGREDIENTS_FAILED };
+}
+
+export function increaseIngredientsAmount(ingredient) {
+  return {
+    type: INCREASE_INGREDIENTS_AMOUNT,
+    _id: ingredient._id,
+  };
+}
+
+export function decreaseIngredientsAmount(item) {
+  return {
+    type: DECREASE_INGREDIENTS_AMOUNT,
+    _id: item._id,
+  };
+}
+
+export function ressetBunAmount() {
+  return { type: RESSET_BUNS_AMOUNT };
+}
+
 export const fetchIngredients = () => async (dispatch) => {
-  dispatch({ type: GET_INGREDIENTS_REQUEST });
+  dispatch(getIngredientRequest());
   try {
     const { success, data } = await getData("ingredients");
     if (success) {
-      dispatch({
-        type: GET_INGREDIENTS_SUCCESS,
-        data: data.map((ingredient) => ({ ...ingredient, qnt: 0 })),
-      });
+      dispatch(getIngredientSuccess(data));
     } else {
-      dispatch({ type: GET_INGREDIENTS_FAILED });
+      dispatch(getIngredientFailed());
       alert("Не удалось получить список ингридиентов :(");
     }
   } catch (error) {
-    dispatch({ type: GET_INGREDIENTS_FAILED });
+    dispatch(getIngredientFailed());
     console.error(error);
     alert(`Не удалось получить список ингридиентов. ${error.message}`);
   }

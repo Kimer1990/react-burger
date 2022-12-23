@@ -3,19 +3,20 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { resetPass } from "../../../services/actions/resetPassActions";
 import styles from "../form-pages.module.css";
+import { useForm } from "../../../hooks/useForm";
 
 export const ResetPassPage = () => {
-  const [form, setValue] = useState({ password: "", token: "" });
+  const { form, handleChange } = useForm({ password: "", token: "" });
   const history = useHistory();
   const dispatch = useDispatch();
 
   const inputsChange = (e) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
+    handleChange(e);
   };
 
   const isPassReseted = useSelector(
@@ -38,7 +39,7 @@ export const ResetPassPage = () => {
 
   return (
     <div className={styles.container}>
-      <form className={styles["auth-form"]}>
+      <form className={styles["auth-form"]} onSubmit={dropPass}>
         <h1 className={`text text_type_main-medium ${styles.title}`}>
           Восстановление пароля
         </h1>
@@ -63,12 +64,7 @@ export const ResetPassPage = () => {
         </div>
 
         <div className={`mt-6 ${styles.submit}`}>
-          <Button
-            onClick={dropPass}
-            htmlType="button"
-            type="primary"
-            size="medium"
-          >
+          <Button htmlType="submit" type="primary" size="medium">
             Сохранить
           </Button>
         </div>

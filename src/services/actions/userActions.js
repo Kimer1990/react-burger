@@ -5,36 +5,52 @@ export const GET_USER_SUCCESS = "GET_USER_SUCCESS";
 export const GET_USER_FAILED = "GET_USER_FAILED";
 export const TOGGLE_USER_AUTH_CHECKED = "TOGGLE_USER_AUTH_CHECKED";
 
+export function getUserRequest() {
+  return { type: GET_USER_REQUEST };
+}
+
+export function getUserSuccess(user) {
+  return { type: GET_USER_SUCCESS, payload: user };
+}
+
+export function getUserFailed() {
+  return { type: GET_USER_FAILED };
+}
+
+export function toggleUserAuthChecked() {
+  return { type: TOGGLE_USER_AUTH_CHECKED };
+}
+
 export const getUser = (data) => async (dispatch) => {
-  dispatch({ type: GET_USER_REQUEST });
+  dispatch(getUserRequest());
   try {
     const response = await postData("auth/login", data);
     if (response.success) {
       const { refreshToken, accessToken, user } = response;
 
-      dispatch({ type: GET_USER_SUCCESS, payload: user });
+      dispatch(getUserSuccess(user));
       saveTokens(refreshToken, accessToken);
     } else {
-      dispatch({ type: GET_USER_FAILED });
+      dispatch(getUserFailed());
       alert(`Ошибка авторизации. ${response.message}`);
     }
   } catch (error) {
-    dispatch({ type: GET_USER_FAILED });
+    dispatch(getUserFailed());
     console.error(error);
     alert(`Ошибка авторизации. ${error.message}`);
   }
 };
 
 export const getUserWithToken = () => async (dispatch) => {
-  dispatch({ type: GET_USER_REQUEST });
+  dispatch(getUserRequest());
   try {
     const response = await getDataWithToken("auth/user");
     if (response.success) {
-      dispatch({ type: GET_USER_SUCCESS, payload: response.user });
+      dispatch(getUserSuccess(response.user));
     } else {
-      dispatch({ type: GET_USER_FAILED });
+      dispatch(getUserFailed());
     }
   } catch (error) {
-    dispatch({ type: GET_USER_FAILED });
+    dispatch(getUserFailed());
   }
 };

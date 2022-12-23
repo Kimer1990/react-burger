@@ -1,5 +1,6 @@
-import "./App.css";
 import { Route, Switch, useLocation, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { LoginPage } from "../../pages/formPages/loginPage/login-page";
 import { RegisterPage } from "../../pages/formPages/registerPage/register-page";
 import { ForgotPassPage } from "../../pages/formPages/forgotPassPage/forgot-pass-page";
@@ -10,15 +11,27 @@ import { ProfilePage } from "../../pages/profilePage/propfile-page";
 import { ProtectedRoute } from "../protected-route";
 import { Modal } from "../modal/modal";
 import { IngredientDetails } from "../ingredientDetails/ingredientDetails";
+import { fetchIngredients } from "../../services/actions/allIngredientsActions";
 
 function App() {
+  const dispatch = useDispatch();
   const location = useLocation();
-  let background = location.state && location.state.background;
+  const background = location.state && location.state.background;
   const history = useHistory();
+
+  const ingredientsList = useSelector(
+    (state) => state.allIngredients.ingredientsList
+  );
 
   const closeDetails = () => {
     history.goBack();
   };
+
+  useEffect(() => {
+    if (!ingredientsList?.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredientsList]);
 
   return (
     <>

@@ -4,19 +4,20 @@ import {
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { register } from "../../../services/actions/registerActions";
 import styles from "../form-pages.module.css";
+import { useForm } from "../../../hooks/useForm";
 
 export const RegisterPage = () => {
-  const [form, setValue] = useState({ name: "", email: "", password: "" });
+  const { form, handleChange } = useForm({ name: "", email: "", password: "" });
   const history = useHistory();
   const dispatch = useDispatch();
 
   const inputsChange = (e) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
+    handleChange(e);
   };
 
   const isRegistered = useSelector((state) => state.register.registerSuccess);
@@ -40,7 +41,7 @@ export const RegisterPage = () => {
 
   return (
     <div className={styles.container}>
-      <form className={styles["auth-form"]}>
+      <form className={styles["auth-form"]} onSubmit={registerUser}>
         <h1 className={`text text_type_main-medium ${styles.title}`}>
           Регистрация
         </h1>
@@ -73,12 +74,7 @@ export const RegisterPage = () => {
         </div>
 
         <div className={`mt-6 ${styles.submit}`}>
-          <Button
-            onClick={registerUser}
-            htmlType="submit"
-            type="primary"
-            size="medium"
-          >
+          <Button htmlType="submit" type="primary" size="medium">
             Зарегистрироваться
           </Button>
         </div>

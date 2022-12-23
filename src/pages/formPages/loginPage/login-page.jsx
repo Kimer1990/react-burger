@@ -3,18 +3,19 @@ import {
   EmailInput,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUser } from "../../../services/actions/userActions";
 import styles from "../form-pages.module.css";
+import { useForm } from "../../../hooks/useForm";
 
 export const LoginPage = () => {
-  const [form, setValue] = useState({ email: "", password: "" });
+  const { form, handleChange } = useForm({ email: "", password: "" });
   const dispatch = useDispatch();
 
   const inputsChange = (e) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
+    handleChange(e);
   };
 
   const login = useCallback(
@@ -27,7 +28,7 @@ export const LoginPage = () => {
 
   return (
     <div className={styles.container}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={login}>
         <h1 className={`text text_type_main-medium ${styles.title}`}>Вход</h1>
 
         <div className="mt-6">
@@ -47,12 +48,7 @@ export const LoginPage = () => {
         </div>
 
         <div className={`mt-6 ${styles.submit}`}>
-          <Button
-            htmlType="submit"
-            type="primary"
-            size="medium"
-            onClick={login}
-          >
+          <Button htmlType="submit" type="primary" size="medium">
             Войти
           </Button>
         </div>

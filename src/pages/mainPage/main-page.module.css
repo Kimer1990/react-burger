@@ -1,0 +1,11 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1240px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.title {
+  width: 100%;
+}

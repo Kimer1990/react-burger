@@ -1,22 +1,14 @@
 import styles from "./ingredient-details.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useEffect, useMemo } from "react";
-import { fetchIngredients } from "../../services/actions/allIngredientsActions";
+import { useMemo } from "react";
 
 export const IngredientDetails = ({ title }) => {
-  const dispatch = useDispatch();
   const params = useParams();
 
   const ingredientsList = useSelector(
     (state) => state.allIngredients.ingredientsList
   );
-
-  useEffect(() => {
-    if (!ingredientsList.length) {
-      dispatch(fetchIngredients());
-    }
-  }, [dispatch, ingredientsList.length]);
 
   const ingredient = useMemo(
     () => ingredientsList.find((item) => item._id === params.id),

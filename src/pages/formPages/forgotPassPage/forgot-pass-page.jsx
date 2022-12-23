@@ -2,19 +2,20 @@ import {
   Button,
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { recoverPass } from "../../../services/actions/recoverPassActions";
 import styles from "../form-pages.module.css";
+import { useForm } from "../../../hooks/useForm";
 
 export const ForgotPassPage = () => {
-  const [email, setEmail] = useState("");
+  const { form, handleChange } = useForm({ email: "" });
   const history = useHistory();
   const dispatch = useDispatch();
 
   const inputEmailChange = (e) => {
-    setEmail(e.target.value);
+    handleChange(e);
   };
 
   const isPassRecovered = useSelector(
@@ -30,14 +31,14 @@ export const ForgotPassPage = () => {
   const updatePass = useCallback(
     async (e) => {
       e.preventDefault();
-      dispatch(recoverPass({ email }));
+      dispatch(recoverPass(form));
     },
-    [dispatch, email]
+    [dispatch, form]
   );
 
   return (
     <div className={styles.container}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={updatePass}>
         <h1 className={`text text_type_main-medium ${styles.title}`}>
           Восстановление пароля
         </h1>
@@ -45,18 +46,13 @@ export const ForgotPassPage = () => {
         <div className="mt-6">
           <EmailInput
             onChange={inputEmailChange}
-            value={email}
-            name={"E-mail"}
+            value={form.email}
+            name={"email"}
           />
         </div>
 
         <div className={`mt-6 ${styles.submit}`}>
-          <Button
-            onClick={updatePass}
-            htmlType="button"
-            type="primary"
-            size="medium"
-          >
+          <Button htmlType="submit" type="primary" size="medium">
             Восстановить
           </Button>
         </div>

@@ -12,21 +12,29 @@ import { FillingsItem } from "./fillings-item/fillings-item";
 import { makeOrder } from "../../services/actions/orderActions";
 import { addIngredient } from "../../services/actions/orderIngredientsActions";
 import { useDrop } from "react-dnd";
+import { useHistory } from "react-router-dom";
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [modalOpened, setModalOpened] = useState(false);
 
   const { fillings, bun, orderSum } = useSelector(
     (state) => state.orderIngredients
   );
+  const { loginSuccess } = useSelector((state) => state.user);
 
   const openOrder = useCallback(() => {
-    const allId = [bun._id, ...fillings.map((item) => item._id), bun._id];
-    dispatch(makeOrder({ ingredients: allId }));
-    setModalOpened(true);
-  }, [dispatch, fillings, bun]);
+    if (!loginSuccess) {
+      console.log("++");
+      history.push("/login");
+    } else {
+      const allId = [bun._id, ...fillings.map((item) => item._id), bun._id];
+      dispatch(makeOrder({ ingredients: allId }));
+      setModalOpened(true);
+    }
+  }, [dispatch, fillings, bun, loginSuccess, history]);
 
   const closeOrder = () => {
     setModalOpened(false);
@@ -52,14 +60,14 @@ export const BurgerConstructor = () => {
           <ConstructorElement
             type={"top"}
             isLocked={true}
-            text={bun.name}
+            text={`${bun.name} (верх)`}
             price={bun.price}
             thumbnail={bun.image}
           />
         </div>
       )}
       {!!fillings.length && (
-        <ul className={`customs-scroll pr-4 ${styles.list}`}>
+        <ul className={`customs-scroll ${styles.list}`}>
           {fillings.map((item, index) => (
             <FillingsItem
               key={item.unicId}
@@ -74,7 +82,7 @@ export const BurgerConstructor = () => {
           <ConstructorElement
             type={"bottom"}
             isLocked={true}
-            text={bun.name}
+            text={`${bun.name} (низ)`}
             price={bun.price}
             thumbnail={bun.image}
           />

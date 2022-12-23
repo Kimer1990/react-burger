@@ -11,6 +11,9 @@
   gap: 16px;
   max-height: 464px;
   overflow-y: auto;
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
 }
 
 .sum {

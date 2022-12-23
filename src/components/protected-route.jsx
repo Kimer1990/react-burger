@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Redirect, useLocation } from "react-router-dom";
 import {
   getUserWithToken,
-  TOGGLE_USER_AUTH_CHECKED,
+  toggleUserAuthChecked,
 } from "../services/actions/userActions";
 import { Preloader } from "./preloader/Preloader";
 
@@ -17,7 +17,7 @@ export const ProtectedRoute = ({ children, onlyUnAuth = false, ...rest }) => {
   const init = useCallback(async () => {
     await dispatch(getUserWithToken());
     if (!isAuthChecked) {
-      dispatch({ type: TOGGLE_USER_AUTH_CHECKED });
+      dispatch(toggleUserAuthChecked());
     }
   }, [dispatch, isAuthChecked]);
 

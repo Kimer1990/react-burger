@@ -9,7 +9,7 @@ import { burgerListItemPropTypes } from "../../../utils/prop-types";
 import { delIngredient } from "../../../services/actions/orderIngredientsActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
-import { UPDATE_INGREDIENTS_ORDER } from "../../../services/actions/orderIngredientsActions";
+import { updateIngredientOrder } from "../../../services/actions/orderIngredientsActions";
 
 export const FillingsItem = ({ filling, index }) => {
   const dispatch = useDispatch();
@@ -47,10 +47,7 @@ export const FillingsItem = ({ filling, index }) => {
       ) {
         fillings.splice(item.index, 1);
         fillings.splice(index, 0, item.filling);
-        dispatch({
-          type: UPDATE_INGREDIENTS_ORDER,
-          fillings: fillings,
-        });
+        dispatch(updateIngredientOrder(fillings));
         item.index = index;
       }
     },
@@ -70,7 +67,7 @@ export const FillingsItem = ({ filling, index }) => {
       key={filling.unicId}
       data-handler-id={handlerId}
     >
-      <DragIcon className="mr-3" />
+      <DragIcon />
       <ConstructorElement
         isLocked={false}
         text={filling.name}
