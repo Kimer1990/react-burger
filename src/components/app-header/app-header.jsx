@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavItem } from "./nav-item/nav-item";
 import {
   BurgerIcon,
@@ -7,45 +6,41 @@ import {
   Logo,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./app-header.module.css";
-import { menuConst } from "../../utils/constant";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const AppHeader = () => {
-  const { CREATE, ORDERS, PROFILE } = menuConst;
-  const [active, setActive] = useState(CREATE);
+  const location = useLocation();
 
   return (
     <header className={styles.header}>
       <nav className={`${styles.navigation} pt-2 pb-2`}>
         <ul className={styles.list}>
           <li className={`${styles.item} pt-4 pb-4 pr-5 pl-5 mr-2`}>
-            <NavItem
-              name={CREATE}
-              isActive={active === CREATE}
-              update={setActive}
-            >
-              <BurgerIcon type={active === CREATE ? "primary" : "secondary"} />
+            <NavItem name="Конструктор" link="/">
+              <BurgerIcon
+                type={location.pathname === "/" ? "primary" : "secondary"}
+              />
             </NavItem>
           </li>
           <li className={`${styles.item} pt-4 pb-4 pr-5 pl-5`}>
-            <NavItem
-              name={ORDERS}
-              isActive={active === ORDERS}
-              update={setActive}
-            >
-              <ListIcon type={active === ORDERS ? "primary" : "secondary"} />
+            <NavItem name="Лента заказов" link="/feed">
+              <ListIcon
+                type={location.pathname === "/feed" ? "primary" : "secondary"}
+              />
             </NavItem>
           </li>
           <li className={styles.logo}>
-            <Logo />
+            <Link to="/">
+              <Logo />
+            </Link>
           </li>
           <li className={`${styles.item} pt-4 pb-4 pr-5 pl-5`}>
-            <NavItem
-              name={PROFILE}
-              isActive={active === PROFILE}
-              update={setActive}
-            >
+            <NavItem name="Личный кабинет" link="/profile">
               <ProfileIcon
-                type={active === PROFILE ? "primary" : "secondary"}
+                type={
+                  location.pathname === "/profile" ? "primary" : "secondary"
+                }
               />
             </NavItem>
           </li>

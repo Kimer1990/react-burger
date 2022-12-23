@@ -1,30 +1,38 @@
-import { postOrder } from "../../utils/burger-api";
+import { postData } from "../../utils/burger-api";
+import { cleanIngredientOrder } from "./orderIngredientsActions";
 
 export const GET_ORDER_REQUEST = "GET_ORDER_REQUEST";
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
 export const GET_ORDER_FAILED = "GET_ORDER_FAILED";
 
+export function getOrderRequest() {
+  return { type: GET_ORDER_REQUEST };
+}
+
+export function getOrderSuccess(order) {
+  return {
+    type: GET_ORDER_SUCCESS,
+    orderNum: order.number,
+  };
+}
+
+export function getOrderFailed() {
+  return { type: GET_ORDER_FAILED };
+}
+
 export const makeOrder = (data) => async (dispatch) => {
-  dispatch({ type: GET_ORDER_REQUEST });
+  dispatch(getOrderRequest());
   try {
-    const { success, order } = await postOrder({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ingredients: data }),
-    });
+    const { success, order } = await postData("orders", data);
     if (success) {
-      dispatch({
-        type: GET_ORDER_SUCCESS,
-        orderNum: order.number,
-      });
+      dispatch(getOrderSuccess(order));
+      dispatch(cleanIngredientOrder());
     } else {
-      dispatch({ type: GET_ORDER_FAILED });
+      dispatch(getOrderFailed());
       alert("Не удалось оформить заказ :(");
     }
   } catch (error) {
-    dispatch({ type: GET_ORDER_FAILED });
+    dispatch(getOrderFailed());
     console.error(error);
     alert(`Не удалось оформить заказ. ${error.message}`);
   }

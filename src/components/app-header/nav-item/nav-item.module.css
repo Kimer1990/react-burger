@@ -9,6 +9,7 @@
   transition: all 0.3s ease-in;
 }
 
-.link:hover {
+.link:hover,
+.active {
   color: var(--text-primary-color);
 }

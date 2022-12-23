@@ -3,6 +3,8 @@
   flex-wrap: wrap;
   gap: 32px;
   column-gap: 24px;
+  margin: 0;
+  list-style: none;
 }
 
 .title {

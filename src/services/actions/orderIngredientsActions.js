@@ -2,45 +2,53 @@ import { ingredientTypes } from "../../utils/constant";
 import nextId from "react-id-generator";
 
 import {
-  INCREASE_INGREDIENTS_AMOUNT,
-  DECREASE_INGREDIENTS_AMOUNT,
-  RESSET_BUNS_AMOUNT,
+  increaseIngredientsAmount,
+  decreaseIngredientsAmount,
+  ressetBunAmount,
 } from "./allIngredientsActions";
 
 export const ADD_INGREDIENT_TO_ORDER = "ADD_INGREDIENT_TO_ORDER";
 export const DEL_INGREDIENT_FROM_ORDER = "DEL_INGREDIENT_FROM_ORDER";
 export const UPDATE_INGREDIENTS_ORDER = "UPDATE_INGREDIENTS_ORDER";
+export const CLEAN_INGREDIENTS_ORDER = "CLEAN_INGREDIENTS_ORDER";
 
 const { BUN } = ingredientTypes;
 
-export const addIngredient = (ingredient) => (dispatch) => {
-  if (ingredient.type === BUN) {
-    dispatch({
-      type: RESSET_BUNS_AMOUNT,
-    });
-  }
-
-  dispatch({
+export function addIngredientToOrder(ingredient) {
+  return {
     type: ADD_INGREDIENT_TO_ORDER,
     item: {
       ...ingredient,
       unicId: nextId(),
     },
-  });
+  };
+}
 
-  dispatch({
-    type: INCREASE_INGREDIENTS_AMOUNT,
-    _id: ingredient._id,
-  });
+export function delIngredientFromOrder(item) {
+  return {
+    type: DEL_INGREDIENT_FROM_ORDER,
+    item,
+  };
+}
+
+export function updateIngredientOrder(fillings) {
+  return { type: UPDATE_INGREDIENTS_ORDER, fillings: fillings };
+}
+
+export function cleanIngredientOrder() {
+  return { type: CLEAN_INGREDIENTS_ORDER };
+}
+
+export const addIngredient = (ingredient) => (dispatch) => {
+  if (ingredient.type === BUN) {
+    dispatch(ressetBunAmount());
+  }
+
+  dispatch(addIngredientToOrder(ingredient));
+  dispatch(increaseIngredientsAmount(ingredient));
 };
 
 export const delIngredient = (item) => (dispatch) => {
-  dispatch({
-    type: DEL_INGREDIENT_FROM_ORDER,
-    item,
-  });
-  dispatch({
-    type: DECREASE_INGREDIENTS_AMOUNT,
-    _id: item._id,
-  });
+  dispatch(delIngredientFromOrder(item));
+  dispatch(decreaseIngredientsAmount(item));
 };

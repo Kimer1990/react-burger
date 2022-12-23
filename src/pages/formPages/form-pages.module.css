@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  width: 480px;
+  height: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  width: 100%;
+  margin-top: 180px;
+  justify-content: center;
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+}
+
+.link {
+  color: #4c4cff;
+}

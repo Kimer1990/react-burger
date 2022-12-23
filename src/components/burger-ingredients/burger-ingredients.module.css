@@ -14,3 +14,14 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
+.customs-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.customs-scroll::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.customs-scroll::-webkit-scrollbar-thumb {
+  background: #8585ad;
+  border: 0px solid #2f2f37;
+}
