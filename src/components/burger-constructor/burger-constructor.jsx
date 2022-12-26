@@ -6,7 +6,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Modal } from "../modal/modal";
-import { OrderDetails } from "../orderDetails/orderDetails";
+import { OrderCreate } from "../orderCreate/orderCreate";
 import { useDispatch, useSelector } from "react-redux";
 import { FillingsItem } from "./fillings-item/fillings-item";
 import { makeOrder } from "../../services/actions/orderActions";
@@ -105,7 +105,7 @@ export const BurgerConstructor = () => {
       )}
       {modalOpened && (
         <Modal title="" closeModal={closeOrder}>
-          <OrderDetails />
+          <OrderCreate />
         </Modal>
       )}
     </section>

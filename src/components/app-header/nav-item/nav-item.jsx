@@ -7,8 +7,8 @@ export const NavItem = (props) => {
     <NavLink
       to={props.link || "#"}
       exact
-      className={`${styles.link} text_color_inactive text text_type_main-default`}
       activeClassName={styles.active}
+      className={`${styles.link} text text_type_main-default`}
     >
       <div className={`${styles.icon} mr-2`}>{props.children}</div>
       {props.name}

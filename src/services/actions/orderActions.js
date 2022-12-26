@@ -1,5 +1,6 @@
 import { postData } from "../../utils/burger-api";
 import { cleanIngredientOrder } from "./orderIngredientsActions";
+import { ressetBunAmount, ressetFillingsAmount } from "./allIngredientsActions";
 
 export const GET_ORDER_REQUEST = "GET_ORDER_REQUEST";
 export const GET_ORDER_SUCCESS = "GET_ORDER_SUCCESS";
@@ -27,6 +28,8 @@ export const makeOrder = (data) => async (dispatch) => {
     if (success) {
       dispatch(getOrderSuccess(order));
       dispatch(cleanIngredientOrder());
+      dispatch(ressetBunAmount());
+      dispatch(ressetFillingsAmount());
     } else {
       dispatch(getOrderFailed());
       alert("Не удалось оформить заказ :(");

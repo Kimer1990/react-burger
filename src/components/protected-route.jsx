@@ -30,6 +30,7 @@ export const ProtectedRoute = ({ children, onlyUnAuth = false, ...rest }) => {
   }
 
   if (onlyUnAuth && loginSuccess) {
+    console.log("to main");
     const { from } = location.state || { from: { pathname: "/" } };
     return <Redirect to={from} />;
   }
@@ -38,6 +39,7 @@ export const ProtectedRoute = ({ children, onlyUnAuth = false, ...rest }) => {
     (!onlyUnAuth && !loginSuccess) ||
     (location.pathname === "/reset-password" && !recoverPassSuccess)
   ) {
+    console.log("to login");
     return (
       <Redirect
         to={{

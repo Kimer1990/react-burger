@@ -6,6 +6,7 @@ import {
   INCREASE_INGREDIENTS_AMOUNT,
   DECREASE_INGREDIENTS_AMOUNT,
   RESSET_BUNS_AMOUNT,
+  RESSET_FILLINGS_AMOUNT,
 } from "../actions/allIngredientsActions";
 
 const { BUN, MAIN, SAUCE } = ingredientTypes;
@@ -68,6 +69,19 @@ export const allIngredientsReducer = (state = initialState, action) => {
         ingredientsList: [
           ...state.ingredientsList.map((item) => {
             if (item.type === BUN) {
+              item.qnt = 0;
+            }
+            return item;
+          }),
+        ],
+      };
+
+    case RESSET_FILLINGS_AMOUNT:
+      return {
+        ...state,
+        ingredientsList: [
+          ...state.ingredientsList.map((item) => {
+            if (item.type !== BUN) {
               item.qnt = 0;
             }
             return item;

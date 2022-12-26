@@ -1,0 +1,25 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+.number {
+  text-align: center;
+}
+
+.order {
+  display: flex;
+  flex-direction: column;
+  max-height: 336px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

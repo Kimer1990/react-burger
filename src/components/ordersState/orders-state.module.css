@@ -1,0 +1,30 @@
+.main {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: 580px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  max-height: 120px;
+  max-width: 216px;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.table {
+  display: flex;
+  width: 100%;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}

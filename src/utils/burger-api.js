@@ -35,6 +35,20 @@ export const getDataWithToken = async (url) => {
   }
 };
 
+export const getOrderByNumber = async (url) => {
+  const options = {
+    method: "GET",
+    headers: getHeaders(),
+  };
+
+  try {
+    return await makeRequest(`${apiUrl}/${url}`, options);
+  } catch (error) {
+    console.log("error triggered");
+    return checkToken(error, url, options);
+  }
+};
+
 export const postData = async (url, data) => {
   const options = {
     method: "POST",

@@ -1,5 +1,5 @@
 import styles from "./profile-page.module.css";
-import { NavLink, Route, Switch } from "react-router-dom";
+import { NavLink, Route, Switch, useLocation } from "react-router-dom";
 import {
   Button,
   EmailInput,
@@ -14,11 +14,19 @@ import {
   getUserWithToken,
   toggleUserAuthChecked,
 } from "../../services/actions/userActions";
+import {
+  wsConnectionStart,
+  wsConnectionClose,
+} from "../../services/actions/wsActions";
+import { getCookie } from "../../utils/cookie-helper";
+import { OrdersList } from "../../components/ordersList/orders-list";
+import { ProtectedRoute } from "../../components/protected-route";
 
 export const ProfilePage = () => {
   const isAuthChecked = useSelector((state) => state.user.isAuthChecked);
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
   const [hasControls, setControls] = useState(false);
 
   const { email, name } = useSelector((state) => state.user.userInfo);
@@ -28,12 +36,27 @@ export const ProfilePage = () => {
     password: "",
   });
 
+  const isCreated = useSelector((state) => state.ws.isCreated);
+  const isConnected = useSelector((state) => state.ws.isOpen);
+  const userOrdersList = useSelector((state) => state.ws.orders);
+
+  useEffect(() => {
+    if (location.pathname === "/profile/orders" && !isCreated && !isConnected) {
+      dispatch(wsConnectionStart(`?token=${getCookie("accessToken")}`));
+    }
+
+    return () => {
+      if (isConnected) {
+        dispatch(wsConnectionClose());
+      }
+    };
+  }, [dispatch, isConnected, isCreated, location]);
+
   useEffect(() => {
     setForm({ name: name, email: email, password: "" });
-  }, [dispatch, name, email, setForm]);
+  }, [name, email, setForm]);
 
   const inputsChange = (e) => {
-    console.log(e.target);
     handleChange(e);
     if (!hasControls) {
       setControls(true);
@@ -162,6 +185,12 @@ export const ProfilePage = () => {
               )}
             </form>
           </Route>
+        </Switch>
+
+        <Switch>
+          <ProtectedRoute path="/profile/orders" exact={true}>
+            <OrdersList ordersList={userOrdersList} route="/profile/orders" />
+          </ProtectedRoute>
         </Switch>
       </div>
 

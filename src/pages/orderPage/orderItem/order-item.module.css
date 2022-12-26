@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  display: flex;
+  box-sizing: border-box;
+  width: 64px;
+  height: 64px;
+  background: #131316;
+  background-size: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  border: 2px solid #801ab3;
+  margin-left: -16px;
+}
+
+.sum {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.count {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
