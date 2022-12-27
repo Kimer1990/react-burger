@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { ListItem } from "./listItem/list-item";
+import PropTypes from "prop-types";
 import styles from "./orders-list.module.css";
 
 export const OrdersList = ({ route, ordersList }) => {
@@ -7,10 +8,10 @@ export const OrdersList = ({ route, ordersList }) => {
 
   return (
     <section className={`${styles.orders} customs-scroll pr-2`}>
-      {ordersList.map((item, idx) => {
+      {ordersList.map((item) => {
         return (
           <Link
-            key={idx}
+            key={item.number}
             to={{
               pathname: `${route}/${item.number}`,
               state: { background: location },
@@ -23,4 +24,9 @@ export const OrdersList = ({ route, ordersList }) => {
       })}
     </section>
   );
+};
+
+OrdersList.propTypes = {
+  route: PropTypes.string.isRequired,
+  ordersList: PropTypes.array.isRequired,
 };

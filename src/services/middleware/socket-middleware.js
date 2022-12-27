@@ -3,6 +3,9 @@ import { refreshTokenRequest } from "../../utils/burger-api";
 export const socketMiddleware = (wsUrlApi, wsActions) => {
   return (store) => {
     let socket = null;
+    let isConnected = false;
+    let reconnectTimer = 0;
+    let refreshTokenTimer = 0;
 
     return (next) => (action) => {
       const { dispatch } = store;
@@ -14,11 +17,13 @@ export const socketMiddleware = (wsUrlApi, wsActions) => {
         console.log("create socket");
         socket = new WebSocket(`${wsUrlApi}${wsUrl}`);
         dispatch({ type: wsInit });
+        isConnected = true;
       }
 
       if (socket) {
         socket.onopen = (event) => {
           dispatch({ type: onOpen, payload: event });
+          clearTimeout(refreshTokenTimer);
         };
 
         socket.onerror = async (error) => {
@@ -39,11 +44,19 @@ export const socketMiddleware = (wsUrlApi, wsActions) => {
             dispatch({ type: onError, error: event.code.toString() });
           }
           dispatch({ type: onClosed });
+
+          if (isConnected) {
+            reconnectTimer = window.setTimeout(() => {
+              dispatch({ type: wsInit, payload: wsUrl });
+            }, 3000);
+          }
         };
 
         if (type === wsClose) {
           console.log("close socket");
           socket.close();
+          clearTimeout(reconnectTimer);
+          isConnected = false;
         }
       }
 

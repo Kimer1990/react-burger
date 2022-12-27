@@ -15,9 +15,9 @@ import {
   toggleUserAuthChecked,
 } from "../../services/actions/userActions";
 import {
-  wsConnectionStart,
-  wsConnectionClose,
-} from "../../services/actions/wsActions";
+  profileWsConnectionStart,
+  profileWsConnectionClose,
+} from "../../services/actions/profileWsActions";
 import { getCookie } from "../../utils/cookie-helper";
 import { OrdersList } from "../../components/ordersList/orders-list";
 import { ProtectedRoute } from "../../components/protected-route";
@@ -36,18 +36,18 @@ export const ProfilePage = () => {
     password: "",
   });
 
-  const isCreated = useSelector((state) => state.ws.isCreated);
-  const isConnected = useSelector((state) => state.ws.isOpen);
-  const userOrdersList = useSelector((state) => state.ws.orders);
+  const isCreated = useSelector((state) => state.profileWs.isCreated);
+  const isConnected = useSelector((state) => state.profileWs.isOpen);
+  const userOrdersList = useSelector((state) => state.profileWs.orders);
 
   useEffect(() => {
     if (location.pathname === "/profile/orders" && !isCreated && !isConnected) {
-      dispatch(wsConnectionStart(`?token=${getCookie("accessToken")}`));
+      dispatch(profileWsConnectionStart(`?token=${getCookie("accessToken")}`));
     }
 
     return () => {
       if (isConnected) {
-        dispatch(wsConnectionClose());
+        dispatch(profileWsConnectionClose());
       }
     };
   }, [dispatch, isConnected, isCreated, location]);

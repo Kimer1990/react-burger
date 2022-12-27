@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
+import { OrdersTable } from "./ordersTable/orders-table";
 import styles from "./orders-state.module.css";
 
 export const OrdersState = () => {
-  const orderItems = useSelector((state) => state.ws.orders);
-  const orderTotal = useSelector((state) => state.ws.total);
-  const orderTotalToday = useSelector((state) => state.ws.totalToday);
+  const orderItems = useSelector((state) => state.feedWs.orders);
+  const orderTotal = useSelector((state) => state.feedWs.total);
+  const orderTotalToday = useSelector((state) => state.feedWs.totalToday);
   const readyOrders = useMemo(
     () =>
       orderItems
@@ -16,7 +17,7 @@ export const OrdersState = () => {
   const processOrders = useMemo(
     () =>
       orderItems
-        .filter((item) => item.status !== "done")
+        .filter((item) => item.status === "pending")
         .map((item) => item.number),
     [orderItems]
   );
@@ -24,33 +25,11 @@ export const OrdersState = () => {
   return (
     <section className={`${styles.main} ml-15`}>
       <div className={`${styles.table} mb-15`}>
-        <div className={`${styles.status}`}>
-          <div className={`${styles.title} text text_type_main-medium mb-6`}>
-            Готовы:
-          </div>
-          <ul className={`${styles.list}`}>
-            {readyOrders.map((order, idx) => (
-              <li
-                className="text text_type_digits-default font-ready mb-2"
-                key={idx}
-              >
-                {order}
-              </li>
-            ))}
-          </ul>
+        <div className={styles.done}>
+          <OrdersTable status="Готовы" orders={readyOrders}></OrdersTable>
         </div>
-
-        <div className={`${styles.status}`}>
-          <div className={`${styles.title} text text_type_main-medium mb-6`}>
-            В работе:
-          </div>
-          <ul className={`${styles.list}`}>
-            {processOrders.map((order, idx) => (
-              <li className="text text_type_digits-default mb-2" key={idx}>
-                {order}
-              </li>
-            ))}
-          </ul>
+        <div className={styles.pending}>
+          <OrdersTable status="В работе" orders={processOrders}></OrdersTable>
         </div>
       </div>
 

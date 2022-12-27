@@ -1,0 +1,17 @@
+/* .status {
+  display: flex;
+  flex-direction: column;
+} */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-height: 314px;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

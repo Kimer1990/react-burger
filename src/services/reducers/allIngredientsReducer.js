@@ -40,53 +40,45 @@ export const allIngredientsReducer = (state = initialState, action) => {
     case INCREASE_INGREDIENTS_AMOUNT:
       return {
         ...state,
-        ingredientsList: [
-          ...state.ingredientsList.map((item) => {
-            if (item._id === action._id) {
-              item.qnt = item.type === BUN ? 2 : item.qnt + 1;
-            }
-            return item;
-          }),
-        ],
+        ingredientsList: state.ingredientsList.map((item) => {
+          if (item._id === action._id) {
+            item.qnt = item.type === BUN ? 2 : item.qnt + 1;
+          }
+          return item;
+        }),
       };
 
     case DECREASE_INGREDIENTS_AMOUNT:
       return {
         ...state,
-        ingredientsList: [
-          ...state.ingredientsList.map((item) => {
-            if (item._id === action._id) {
-              item.qnt = item.qnt - 1;
-            }
-            return item;
-          }),
-        ],
+        ingredientsList: state.ingredientsList.map((item) => {
+          if (item._id === action._id) {
+            item.qnt = item.qnt - 1;
+          }
+          return item;
+        }),
       };
 
     case RESSET_BUNS_AMOUNT:
       return {
         ...state,
-        ingredientsList: [
-          ...state.ingredientsList.map((item) => {
-            if (item.type === BUN) {
-              item.qnt = 0;
-            }
-            return item;
-          }),
-        ],
+        ingredientsList: state.ingredientsList.map((item) => {
+          if (item.type === BUN) {
+            item.qnt = 0;
+          }
+          return item;
+        }),
       };
 
     case RESSET_FILLINGS_AMOUNT:
       return {
         ...state,
-        ingredientsList: [
-          ...state.ingredientsList.map((item) => {
-            if (item.type !== BUN) {
-              item.qnt = 0;
-            }
-            return item;
-          }),
-        ],
+        ingredientsList: state.ingredientsList.map((item) => {
+          if (item.type !== BUN) {
+            item.qnt = 0;
+          }
+          return item;
+        }),
       };
 
     default:

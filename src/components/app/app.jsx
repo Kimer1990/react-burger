@@ -8,7 +8,7 @@ import { ForgotPassPage } from "../../pages/formPages/forgotPassPage/forgot-pass
 import { ResetPassPage } from "../../pages/formPages/resetPassPage/reset-pass-page";
 import { MainPage } from "../../pages/mainPage/main-page";
 import { FeedPage } from "../../pages/feedPage/feed-page";
-import { ProfilePage } from "../../pages/profilePage/propfile-page";
+import { ProfilePage } from "../../pages/profilePage/profile-page";
 import { IngredientDetailsPage } from "../../pages/ingredientDetailsPage/ingredient-details-page";
 import { OrderPage } from "../../pages/orderPage/order-page";
 import { ProtectedRoute } from "../protected-route";
@@ -61,23 +61,23 @@ function App() {
           <MainPage />
         </Route>
 
-        <Route path="/feed/:id" exact>
-          <OrderPage />
+        <Route exact={true} path="/feed/:id">
+          <OrderPage title={order && `#${order.number}`} />
         </Route>
 
-        <Route path="/feed" exact>
+        <Route exact={true} path="/feed">
           <FeedPage />
         </Route>
 
-        <ProtectedRoute path="/profile/orders/:id" exact>
-          <OrderPage />
+        <ProtectedRoute exact={true} path="/profile/orders/:id">
+          <OrderPage title={order && `#${order.number}`} />
         </ProtectedRoute>
 
         <ProtectedRoute path="/profile">
           <ProfilePage />
         </ProtectedRoute>
 
-        <Route path="/ingredients/:id" exact={true}>
+        <Route path="/ingredients/:id">
           <IngredientDetailsPage title="Детали ингридиента" />
         </Route>
       </Switch>

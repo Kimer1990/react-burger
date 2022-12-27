@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ingredientTypes } from "../../utils/constant";
 import { getOrder } from "../../services/actions/getOrderActions";
 import { Preloader } from "../../components/preloader/Preloader";
+import PropTypes from "prop-types";
 import styles from "./order-page.module.css";
 
 export const OrderPage = ({ title }) => {
@@ -32,7 +33,7 @@ export const OrderPage = ({ title }) => {
       const ingredients = storeIngredients.filter((item) =>
         order.ingredients.includes(item._id)
       );
-      return [...ingredients].map((item) => {
+      return ingredients.map((item) => {
         const allCurIngredients = order.ingredients.filter(
           (elem) => elem === item._id
         );
@@ -83,8 +84,8 @@ export const OrderPage = ({ title }) => {
           <div className={`text text_type_main-medium mb-6`}>Состав:</div>
 
           <ul className={`customs-scroll mb-10 pr-24 ${styles.order} `}>
-            {orderIngredients.map((item, inx) => (
-              <OrderItem key={inx} {...item} />
+            {orderIngredients.map((item) => (
+              <OrderItem key={item._id} {...item} />
             ))}
           </ul>
 
@@ -104,4 +105,8 @@ export const OrderPage = ({ title }) => {
       )}
     </div>
   );
+};
+
+OrderPage.propTypes = {
+  title: PropTypes.string,
 };

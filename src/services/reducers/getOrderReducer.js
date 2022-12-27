@@ -5,14 +5,7 @@ import {
 } from "../actions/getOrderActions";
 
 const initialState = {
-  orderContent: {
-    _id: "",
-    name: "",
-    status: "",
-    number: 0,
-    date: "",
-    ingredients: [],
-  },
+  orderContent: {},
   orderMakedRequest: false,
   orderMakedFailed: false,
 };

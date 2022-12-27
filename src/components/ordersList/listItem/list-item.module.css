@@ -45,6 +45,7 @@
   border-radius: 50%;
   border: 2px solid #801ab3;
   margin-left: -16px;
+  object-fit: cover;
 }
 
 .price {

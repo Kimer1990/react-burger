@@ -1,10 +1,10 @@
 import {
-  WS_CONNECTION_ERROR,
-  WS_GET_MESSAGE,
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_CLOSED,
-  WS_CONNECTION_START,
-} from "../actions/wsActions";
+  FEED_WS_CONNECTION_ERROR,
+  FEED_WS_GET_MESSAGE,
+  FEED_WS_CONNECTION_SUCCESS,
+  FEED_WS_CONNECTION_CLOSED,
+  FEED_WS_CONNECTION_START,
+} from "../actions/feedWsActions";
 
 const initialState = {
   orders: [],
@@ -15,27 +15,27 @@ const initialState = {
   error: null,
 };
 
-export const wsReducer = (state = initialState, action) => {
+export const feedWsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case WS_CONNECTION_START:
+    case FEED_WS_CONNECTION_START:
       return { ...state, isCreated: true };
 
-    case WS_CONNECTION_SUCCESS:
+    case FEED_WS_CONNECTION_SUCCESS:
       return { ...state, isOpen: true, error: null };
 
-    case WS_CONNECTION_ERROR:
+    case FEED_WS_CONNECTION_ERROR:
       return { ...state, error: action.error };
 
-    case WS_GET_MESSAGE:
+    case FEED_WS_GET_MESSAGE:
       const { total, totalToday, orders } = JSON.parse(action.payload);
       return {
         ...state,
         total,
         totalToday,
-        orders: [...state.orders, ...orders],
+        orders: orders,
       };
 
-    case WS_CONNECTION_CLOSED:
+    case FEED_WS_CONNECTION_CLOSED:
       return { ...state, isOpen: false, isCreated: false, orders: [] };
 
     default:

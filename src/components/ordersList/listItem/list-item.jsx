@@ -9,7 +9,12 @@ export const ListItem = ({ name, number, status, updatedAt, ingredients }) => {
   const { BUN } = ingredientTypes;
   const location = useLocation();
 
-  const statusText = status === "done" ? "Выполнен" : "Готовится";
+  const statusText =
+    status === "done"
+      ? "Выполнен"
+      : status === "pending"
+      ? "Готовится"
+      : "Отменен";
   const statusClass = status === "done" ? "font-ready" : "";
 
   const storeIngredients = useSelector(
@@ -60,9 +65,9 @@ export const ListItem = ({ name, number, status, updatedAt, ingredients }) => {
 
       <div className={styles.details}>
         <div className={`${styles.list} ml-4`}>
-          {ingredientsVisible.map((item, idx) => (
+          {ingredientsVisible.map((item) => (
             <img
-              key={idx}
+              key={item._id}
               className={styles.icon}
               src={item.image}
               alt={item.name}
