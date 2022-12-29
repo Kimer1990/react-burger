@@ -1,28 +1,26 @@
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useMemo, useEffect } from "react";
+import {
+  CurrencyIcon,
+  FormattedDate,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { OrderItem } from "./orderItem/order-item";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { ingredientTypes } from "../../utils/constant";
-import { getOrder } from "../../services/actions/getOrderActions";
 import { Preloader } from "../../components/preloader/Preloader";
 import PropTypes from "prop-types";
 import styles from "./order-page.module.css";
 
-export const OrderPage = ({ title }) => {
+export const OrderPage = ({ withTitle, orders }) => {
   const { BUN } = ingredientTypes;
 
   const params = useParams();
-  const dispatch = useDispatch();
 
-  const order = useSelector((state) => state.getOrder.orderContent);
-  const orderMakedRequest = useSelector(
-    (state) => state.getOrder.orderMakedRequest
-  );
-
-  useEffect(() => {
-    dispatch(getOrder(params.id));
-  }, [dispatch, params.id]);
+  const order = useMemo(() => {
+    return orders.find(
+      (item) => item.number.toString() === params.id.toString()
+    );
+  }, [orders, params.id]);
 
   const storeIngredients = useSelector(
     (state) => state.allIngredients.ingredientsList
@@ -59,26 +57,32 @@ export const OrderPage = ({ title }) => {
     // eslint-disable-next-line
   }, [orderIngredients]);
 
+  const statusText =
+    order?.status === "done"
+      ? "Выполнен"
+      : order?.status === "pending"
+      ? "Готовится"
+      : "Отменен";
+  const statusClass = order?.status === "done" ? "font-ready" : "";
+
   return (
     <div className={`${styles.main} pl-8 pr-8`}>
-      {orderMakedRequest && <Preloader />}
+      {!order && <Preloader />}
 
-      {!orderMakedRequest && (
+      {order && (
         <>
-          {title && (
+          {withTitle && (
             <div
               className={`${styles.number} mt-30 text text_type_digits-medium mb-10`}
             >
-              {`#${order.number}`}
+              {`#${order?.number}`}
             </div>
           )}
 
           <div className={`text text_type_main-medium mb-3`}>{order.name}</div>
 
-          <div
-            className={`${order.statusClass} text text_type_main-default mb-15`}
-          >
-            {order.status}
+          <div className={`${statusClass} text text_type_main-default mb-15`}>
+            {statusText}
           </div>
 
           <div className={`text text_type_main-medium mb-6`}>Состав:</div>
@@ -91,7 +95,7 @@ export const OrderPage = ({ title }) => {
 
           <div className={`${styles.summary} pb-8`}>
             <div className="text text_type_main-default text_color_inactive">
-              {order.updatedAt}
+              {<FormattedDate date={new Date(order.updatedAt)} />} i-GMT+3
             </div>
 
             <div className={styles.count}>

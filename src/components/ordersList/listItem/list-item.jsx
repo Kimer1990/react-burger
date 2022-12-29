@@ -1,4 +1,7 @@
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  CurrencyIcon,
+  FormattedDate,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { ingredientTypes } from "../../../utils/constant";
@@ -51,7 +54,7 @@ export const ListItem = ({ name, number, status, updatedAt, ingredients }) => {
         <div className="text text_type_digits-default">{`#${number}`}</div>
 
         <div className="text text_type_main-default text_color_inactive">
-          {updatedAt}
+          {<FormattedDate date={new Date(updatedAt)} />} i-GMT+3
         </div>
       </div>
 

@@ -8,7 +8,6 @@ import { resetPassReducer } from "./resetPassReducer";
 import { registerReducer } from "./registerReducer";
 import { feedWsReducer } from "./feedWsReducer";
 import { profileWsReducer } from "./profileWsReducer";
-import { getOrderReducer } from "./getOrderReducer";
 
 export const rootReducer = combineReducers({
   allIngredients: allIngredientsReducer,
@@ -20,5 +19,4 @@ export const rootReducer = combineReducers({
   register: registerReducer,
   feedWs: feedWsReducer,
   profileWs: profileWsReducer,
-  getOrder: getOrderReducer,
 });

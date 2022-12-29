@@ -20,6 +20,6 @@ export const OrdersTable = ({ status, orders }) => {
 };
 
 OrdersTable.propTypes = {
-  orders: PropTypes.array.isRequired,
+  orders: PropTypes.arrayOf(PropTypes.number),
   status: PropTypes.string.isRequired,
 };

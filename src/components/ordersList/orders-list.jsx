@@ -8,10 +8,10 @@ export const OrdersList = ({ route, ordersList }) => {
 
   return (
     <section className={`${styles.orders} customs-scroll pr-2`}>
-      {ordersList.map((item) => {
+      {ordersList?.map((item) => {
         return (
           <Link
-            key={item.number}
+            key={item._id}
             to={{
               pathname: `${route}/${item.number}`,
               state: { background: location },
@@ -28,5 +28,5 @@ export const OrdersList = ({ route, ordersList }) => {
 
 OrdersList.propTypes = {
   route: PropTypes.string.isRequired,
-  ordersList: PropTypes.array.isRequired,
+  ordersList: PropTypes.PropTypes.arrayOf(PropTypes.object).isRequired,
 };

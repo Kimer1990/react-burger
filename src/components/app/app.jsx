@@ -14,14 +14,20 @@ import { OrderPage } from "../../pages/orderPage/order-page";
 import { ProtectedRoute } from "../protected-route";
 import { Modal } from "../modal/modal";
 import { fetchIngredients } from "../../services/actions/allIngredientsActions";
+import {
+  feedWsConnectionStart,
+  feedWsConnectionClose,
+} from "../../services/actions/feedWsActions";
+import {
+  profileWsConnectionStart,
+  profileWsConnectionClose,
+} from "../../services/actions/profileWsActions";
 
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state && location.state.background;
   const history = useHistory();
-
-  const order = useSelector((state) => state.getOrder.orderContent);
 
   const ingredientsList = useSelector(
     (state) => state.allIngredients.ingredientsList
@@ -36,6 +42,56 @@ function App() {
       dispatch(fetchIngredients());
     }
   }, [dispatch, ingredientsList]);
+
+  const feedWsIsCreated = useSelector((state) => state.feedWs.isCreated);
+  const feedWsIsConnected = useSelector((state) => state.feedWs.isOpen);
+  const feedWsList = useSelector((state) => state.feedWs.orders);
+
+  useEffect(() => {}, [
+    dispatch,
+    feedWsIsCreated,
+    feedWsIsConnected,
+    location.pathname,
+  ]);
+
+  const profileWsIsCreated = useSelector((state) => state.profileWs.isCreated);
+  const profileWsIsConnected = useSelector((state) => state.profileWs.isOpen);
+  const profileWsList = useSelector((state) => state.profileWs.orders);
+
+  useEffect(() => {
+    if (location.pathname.search("/profile/orders/") !== -1) {
+      if (!profileWsIsCreated && !profileWsIsConnected) {
+        dispatch(profileWsConnectionStart("/all"));
+      }
+
+      return () => {
+        if (profileWsIsConnected) {
+          dispatch(profileWsConnectionClose());
+        }
+      };
+    } else if (location.pathname.search("/feed/") !== -1) {
+      if (
+        location.pathname.search("/feed/") !== -1 &&
+        !feedWsIsCreated &&
+        !feedWsIsConnected
+      ) {
+        dispatch(feedWsConnectionStart("/all"));
+      }
+
+      return () => {
+        if (feedWsIsConnected) {
+          dispatch(feedWsConnectionClose());
+        }
+      };
+    }
+  }, [
+    dispatch,
+    profileWsIsCreated,
+    profileWsIsConnected,
+    feedWsIsConnected,
+    feedWsIsCreated,
+    location.pathname,
+  ]);
 
   return (
     <>
@@ -62,7 +118,7 @@ function App() {
         </Route>
 
         <Route exact={true} path="/feed/:id">
-          <OrderPage title={order && `#${order.number}`} />
+          <OrderPage orders={feedWsList} withTitle={true} />
         </Route>
 
         <Route exact={true} path="/feed">
@@ -70,7 +126,7 @@ function App() {
         </Route>
 
         <ProtectedRoute exact={true} path="/profile/orders/:id">
-          <OrderPage title={order && `#${order.number}`} />
+          <OrderPage orders={profileWsList} withTitle={true} />
         </ProtectedRoute>
 
         <ProtectedRoute path="/profile">
@@ -98,11 +154,11 @@ function App() {
           path="/feed/:id"
           children={
             <Modal
-              title={`#${order.number}`}
+              title={`#${location.pathname.replace(/[^0-9]/g, "")}`}
               titleNumber={true}
               closeModal={closeDetails}
             >
-              <OrderPage />
+              <OrderPage orders={feedWsList} withTitle={false} />
             </Modal>
           }
         />
@@ -113,11 +169,11 @@ function App() {
           path="/profile/orders/:id"
           children={
             <Modal
-              title={`#${order.number}`}
+              title={`#${location.pathname.replace(/[^0-9]/g, "")}`}
               titleNumber={true}
               closeModal={closeDetails}
             >
-              <OrderPage />
+              <OrderPage orders={profileWsList} withTitle={false} />
             </Modal>
           }
         />

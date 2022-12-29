@@ -32,7 +32,15 @@ export const profileWsReducer = (state = initialState, action) => {
         ...state,
         total,
         totalToday,
-        orders: orders,
+        orders: orders.sort(function (a, b) {
+          if (a.number > b.number) {
+            return -1;
+          }
+          if (a.number < b.number) {
+            return 1;
+          }
+          return 0;
+        }),
       };
 
     case PROFILE_WS_CONNECTION_CLOSED:

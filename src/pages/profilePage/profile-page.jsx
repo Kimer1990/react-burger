@@ -1,12 +1,17 @@
 import styles from "./profile-page.module.css";
-import { NavLink, Route, Switch, useLocation } from "react-router-dom";
+import {
+  NavLink,
+  Route,
+  Switch,
+  useLocation,
+  useHistory,
+} from "react-router-dom";
 import {
   Button,
   EmailInput,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useCallback, useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logOut, patchData } from "../../utils/burger-api";
 import { useForm } from "../../hooks/useForm";
