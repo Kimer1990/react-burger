@@ -7,6 +7,7 @@ export const GET_INGREDIENTS_FAILED = "GET_INGREDIENTS_FAILED";
 export const INCREASE_INGREDIENTS_AMOUNT = "INCREASE_INGREDIENTS_AMOUNT";
 export const DECREASE_INGREDIENTS_AMOUNT = "DECREASE_INGREDIENTS_AMOUNT";
 export const RESSET_BUNS_AMOUNT = "RESSET_BUNS_AMOUNT";
+export const RESSET_FILLINGS_AMOUNT = "RESSET_FILLINGS_AMOUNT";
 
 export function getIngredientRequest() {
   return { type: GET_INGREDIENTS_REQUEST };
@@ -39,6 +40,10 @@ export function decreaseIngredientsAmount(item) {
 
 export function ressetBunAmount() {
   return { type: RESSET_BUNS_AMOUNT };
+}
+
+export function ressetFillingsAmount() {
+  return { type: RESSET_FILLINGS_AMOUNT };
 }
 
 export const fetchIngredients = () => async (dispatch) => {

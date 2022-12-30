@@ -1,9 +1,9 @@
-import styles from "./ingredient-details.module.css";
+import styles from "./ingredient-details-page.module.css";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useMemo } from "react";
 
-export const IngredientDetails = ({ title }) => {
+export const IngredientDetailsPage = ({ title }) => {
   const params = useParams();
 
   const ingredientsList = useSelector(
@@ -14,10 +14,6 @@ export const IngredientDetails = ({ title }) => {
     () => ingredientsList.find((item) => item._id === params.id),
     [ingredientsList, params.id]
   );
-
-  console.log(ingredientsList);
-  console.log(ingredient);
-  console.log(params);
 
   return (
     ingredient && (

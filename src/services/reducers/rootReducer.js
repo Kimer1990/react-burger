@@ -6,6 +6,8 @@ import { userReducer } from "./userReducer";
 import { recoverPassReducer } from "./recoverPassReducer";
 import { resetPassReducer } from "./resetPassReducer";
 import { registerReducer } from "./registerReducer";
+import { feedWsReducer } from "./feedWsReducer";
+import { profileWsReducer } from "./profileWsReducer";
 
 export const rootReducer = combineReducers({
   allIngredients: allIngredientsReducer,
@@ -15,4 +17,6 @@ export const rootReducer = combineReducers({
   recoverPass: recoverPassReducer,
   resetPass: resetPassReducer,
   register: registerReducer,
+  feedWs: feedWsReducer,
+  profileWs: profileWsReducer,
 });

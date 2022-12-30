@@ -1,8 +1,8 @@
-import styles from "./order-details.module.css";
+import styles from "./order-create.module.css";
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "react-redux";
 
-export const OrderDetails = () => {
+export const OrderCreate = () => {
   const { orderNum, orderRequest, orderFailed } = useSelector(
     (state) => state.order
   );

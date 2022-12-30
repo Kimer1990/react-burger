@@ -1,0 +1,23 @@
+.main {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: 580px;
+}
+
+.table {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.done {
+  display: flex;
+  flex-direction: column;
+}
+
+.pending {
+  display: flex;
+  flex-direction: column;
+}

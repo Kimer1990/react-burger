@@ -86,6 +86,7 @@ const checkToken = async (error, url, options) => {
 };
 
 export const refreshTokenRequest = () => {
+  console.log("refreshToken triggered");
   return postData("auth/token", {
     token: localStorage.getItem("refreshToken"),
   });
