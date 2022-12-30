@@ -47,13 +47,6 @@ function App() {
   const feedWsIsConnected = useSelector((state) => state.feedWs.isOpen);
   const feedWsList = useSelector((state) => state.feedWs.orders);
 
-  useEffect(() => {}, [
-    dispatch,
-    feedWsIsCreated,
-    feedWsIsConnected,
-    location.pathname,
-  ]);
-
   const profileWsIsCreated = useSelector((state) => state.profileWs.isCreated);
   const profileWsIsConnected = useSelector((state) => state.profileWs.isOpen);
   const profileWsList = useSelector((state) => state.profileWs.orders);

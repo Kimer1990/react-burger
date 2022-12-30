@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { ingredientTypes } from "../../utils/constant";
 import { Preloader } from "../../components/preloader/Preloader";
 import PropTypes from "prop-types";
+import { orderItemPropTypes } from "../../utils/prop-types";
 import styles from "./order-page.module.css";
 
 export const OrderPage = ({ withTitle, orders }) => {
@@ -95,7 +96,8 @@ export const OrderPage = ({ withTitle, orders }) => {
 
           <div className={`${styles.summary} pb-8`}>
             <div className="text text_type_main-default text_color_inactive">
-              {<FormattedDate date={new Date(order.updatedAt)} />} i-GMT+3
+              {<FormattedDate date={new Date(order.updatedAt)} />} i-GMT+
+              {Math.abs(new Date().getTimezoneOffset()) / 60}
             </div>
 
             <div className={styles.count}>
@@ -112,5 +114,6 @@ export const OrderPage = ({ withTitle, orders }) => {
 };
 
 OrderPage.propTypes = {
-  title: PropTypes.string,
+  withTitle: PropTypes.bool.isRequired,
+  orders: PropTypes.arrayOf(orderItemPropTypes).isRequired,
 };

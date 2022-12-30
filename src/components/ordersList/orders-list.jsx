@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { ListItem } from "./listItem/list-item";
 import PropTypes from "prop-types";
+import { orderItemPropTypes } from "../../utils/prop-types";
 import styles from "./orders-list.module.css";
 
 export const OrdersList = ({ route, ordersList }) => {
@@ -28,5 +29,5 @@ export const OrdersList = ({ route, ordersList }) => {
 
 OrdersList.propTypes = {
   route: PropTypes.string.isRequired,
-  ordersList: PropTypes.PropTypes.arrayOf(PropTypes.object).isRequired,
+  ordersList: PropTypes.arrayOf(orderItemPropTypes).isRequired,
 };

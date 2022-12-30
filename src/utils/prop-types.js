@@ -14,3 +14,12 @@ export const burgerListItemPropTypes = PropTypes.shape({
   image_large: PropTypes.string.isRequired,
   __v: PropTypes.number.isRequired,
 });
+
+export const orderItemPropTypes = PropTypes.shape({
+  ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
+  _id: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  number: PropTypes.number.isRequired,
+  createdAt: PropTypes.string.isRequired,
+  updatedAt: PropTypes.string.isRequired,
+});

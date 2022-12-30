@@ -54,7 +54,8 @@ export const ListItem = ({ name, number, status, updatedAt, ingredients }) => {
         <div className="text text_type_digits-default">{`#${number}`}</div>
 
         <div className="text text_type_main-default text_color_inactive">
-          {<FormattedDate date={new Date(updatedAt)} />} i-GMT+3
+          {<FormattedDate date={new Date(updatedAt)} />} i-GMT+
+          {Math.abs(new Date().getTimezoneOffset()) / 60}
         </div>
       </div>
 
