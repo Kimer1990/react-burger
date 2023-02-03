@@ -3,7 +3,6 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-item.module.css";
-import { burgerListItemPropTypes } from "../../../utils/prop-types";
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
 import { TIngredient } from "../../../services/types/data";
@@ -49,8 +48,4 @@ export const BurgerItem = ({ ingredient }: TIngredient) => {
       </li>
     </Link>
   );
-};
-
-BurgerItem.propTypes = {
-  menuItem: burgerListItemPropTypes,
 };
