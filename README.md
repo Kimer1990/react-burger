@@ -1,46 +1,81 @@
-# Getting Started with Create React App
+## Проект Stellar Burgers.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Оглавление
 
-## Available Scripts
+- [Описание:](#description)
+- [Github Page:](#github)
+- [Функционал:](#func)
+- [Технологии, использованные при создании:](#tech)
+- [Языки:](#lang)
+- [Дополнительные компоненты:](#add)
+- [Установка проекта:](#install)
 
-In the project directory, you can run:
+## <a id="description" />Описание:
 
-### `npm start`
+Stellar Burgers — одностраничное приложение космической бургерной. Позволяет собрать и заказать бургер с уникальным набором ингредиентов.
+Проект предназначен для настольных компьютеров (разрешение 1280x720 и выше).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Cоздано при помощи [Create React App](https://github.com/facebook/create-react-app).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## <a id="github" />Github Page:
 
-### `npm test`
+[Ссылка на проект на Github Pages](https://kimer1990.github.io/react-burger/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## <a id="func" />Функционал:
 
-### `npm run build`
+- ингредиенты добавляются в заказ путем перетаскивания (Drag&Drop)
+- Регистрация, авторизация пользователя, восстановление пароля
+- Есть защищенный роутинг
+- Лента заказов приходит WebSocket
+- Хранение токенов в cookie
+- Можно посмотреть историю заказов
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## <a id="tech" />Технологии, использованные при создании:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- React.JS (шаблон CRA)
+- TypeScript
+- Redux + Redux-thunk
+- React Router
+- WebSocket
+- JWT Token
+- React DND
+- Набор UI-компонентов для курсового проекта [Яндекс.Практикум](https://yandex-praktikum.github.io/react-developer-burger-ui-components/docs/)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## <a id="lang" />Языки:
 
-### `npm run eject`
+- HTML
+- CSS
+- JS
+- TypeScript
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## <a id="add" />Дополнительные компоненты:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Для работы с проектом необходимо иметь предустановленные Git, NodeJS
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## <a id="install" />Установка проекта:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Перейдите в вашу папку для хранения репозиториев. В командной строке вышего IDE выполните следующую команду клонирования с GitHub:
 
-## Learn More
+```sh
+`$ git clone git@github.com:Kimer1990/react-burger.git`
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Для установки необходимых пакетов выполните:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```sh
+`$ npm install`
+```
+
+Для запуска проекта на локальном сервере:
+
+```sh
+`$ npm start`
+```
+
+Запускает приложение в режиме разработки.\
+В браузере откроется страница по адресу [http://localhost:3000 ](http://localhost:3000 ).
+
+Страница перезагрузится, если вы внесете изменения.\
+Вы также увидите любые ошибки в консоли.
+
+[В начало](#top)
